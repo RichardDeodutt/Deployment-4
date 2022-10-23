@@ -5,5 +5,5 @@ variable "region"{
 
 variable "bucketname"{
     type = string
-    default = "terraform_remote_statefile"
+    default = "terraform-remote-statefile"
 }
