@@ -1,4 +1,4 @@
-name: Deploy Jenkins
+name: Release Jenkins
 
 on: 
   workflow_dispatch: 
@@ -10,8 +10,8 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 jobs: 
-  deploy-jenkins: 
-    name: Deploy Jenkins using Terraform
+  release-jenkins: 
+    name: Release Jenkins using Terraform
     runs-on: ubuntu-latest
     defaults:
       run:

@@ -21,12 +21,12 @@ jobs:
     - uses: actions/checkout@v3
       name: GitHub Checkout
     - name: Jenkins Install Unit Test
-      run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Install-Runners/jenkins.sh && sudo chmod +x jenkins.sh && sudo ./jenkins.sh
+      run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstalljenkins.sh && sudo chmod +x runinstalljenkins.sh && sudo ./runinstalljenkins.sh
     - name: Terraform Install Unit Test
-      run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Install-Runners/terraform.sh && sudo chmod +x terraform.sh && sudo ./terraform.sh
+      run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstallterraform.sh && sudo chmod +x runinstallterraform.sh && sudo ./runinstallterraform.sh
     - name: Agent Install Unit Test
-      run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Install-Runners/agent.sh && sudo chmod +x agent.sh && sudo ./agent.sh
+      run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstallagent.sh && sudo chmod +x runinstallagent.sh && sudo ./runinstallagent.sh
     - name: Cypress Dependencies Install Unit Test
-      run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Install-Runners/cydepends.sh && sudo chmod +x cydepends.sh && sudo ./cydepends.sh
+      run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstallcydepends.sh && sudo chmod +x runinstallcydepends.sh && sudo ./runinstallcydepends.sh
     - name: Status Check Unit Test
-      run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Install-Runners/status.sh && sudo chmod +x status.sh && sudo ./status.sh
+      run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runstatuscheck.sh && sudo chmod +x runstatuscheck.sh && sudo ./runstatuscheck.sh
