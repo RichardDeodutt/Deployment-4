@@ -25,7 +25,8 @@ admincheck(){
 
 #The main function
 main(){
-    curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/installterraform.sh && chmod +x installterraform.sh && curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/libstandard.sh && chmod +x libstandard.sh && ./installterraform.sh
+    #RDGOAT = Run Directory Gather Organize All Together
+    mkdir RDGOAT ; cd RDGOAT ; curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/installterraform.sh && chmod +x installterraform.sh && curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/libstandard.sh && chmod +x libstandard.sh && ./installterraform.sh
 }
 
 #Check for admin permissions
