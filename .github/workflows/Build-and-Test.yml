@@ -1,0 +1,23 @@
+name: Build and Test
+on: 
+  push: 
+    branches: 
+      - main
+
+env: 
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+jobs: 
+  script-tests: 
+    name: Script Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: .
+    steps: 
+    - uses: actions/checkout@v3
+      name: GitHub Checkout
+    - name: Terraform Install Test
+      run: cd && curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/installterraform.sh && sudo chmod +x installterraform.sh && curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/libstandard.sh && sudo chmod +x libstandard.sh && sudo ./installterraform.sh
