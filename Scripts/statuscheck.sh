@@ -7,10 +7,13 @@
 #Source or import standard.sh
 source libstandard.sh
 
+#Name of main target
+Name='status check'
+
 #Home directory
 Home='/home'
 
-#Log file name for the status check
+#Log file name
 LogFileName="StatusCheck.log"
 
 #Set the log file location and name
@@ -24,9 +27,8 @@ main(){
     java -version > /dev/null 2>&1 && log "$(echo "Java Version" ; java -version 2>&1 | cat )" || logwarning "Can't Check the version of Java"
     #Log Jenkins Status
     systemctl status jenkins --no-pager > /dev/null 2>&1 && log "$(echo "Jenkins Status" ; systemctl status jenkins --no-pager)" || logwarning "Can't Check the Status of Jenkins"
-    #Log Jenkins Secret Password if it exists(May not if jenkins is set up already and created a user on the webpage)
-    log "$(echo "Secret Password")"
-    cat /var/lib/jenkins/secrets/initialAdminPassword > /dev/null 2>&1 && logokay "$(cat /var/lib/jenkins/secrets/initialAdminPassword)" || logwarning "No Secret Password Found, May not be Needed"
+    #Log Nginx Status
+    systemctl status nginx --no-pager > /dev/null 2>&1 && log "$(echo "Nginx Status" ; systemctl status nginx --no-pager)" || logwarning "Can't Check the Status of Nginx"
     #Log the node version
     log "$(echo "The Node Version")"
     npm --version > /dev/null 2>&1 && logokay "$(node --version)" || logwarning "Can't Check the version of Node"
@@ -41,7 +43,7 @@ main(){
 }
 
 #Log start
-logokay "Running the status check script"
+logokay "Running the ${Name} script"
 
 #Check for admin permissions
 admincheck
@@ -50,7 +52,7 @@ admincheck
 main
 
 #Log successs
-logokay "Ran the status check script successfully"
+logokay "Ran the ${Name} script successfully"
 
 #Exit successs
 exit 0

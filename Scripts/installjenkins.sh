@@ -7,10 +7,13 @@
 #Source or import standard.sh
 source libstandard.sh
 
+#Name of main target
+Name='jenkins'
+
 #Home directory
 Home='/home'
 
-#Log file name for jenkins installation
+#Log file name
 LogFileName="InstallJenkins.log"
 
 #Set the log file location and name
@@ -22,10 +25,10 @@ ConfigNginx="https://raw.githubusercontent.com/RichardDeodutt/Deployment-3/main/
 #The main function
 main(){
     #Adding the Keyrings if not already
-    wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | gpg --batch --yes --dearmor -o /usr/share/keyrings/jenkins.gpg && logokay "Successfully installed jenkins keyring" || { logerror "Failure installing jenkins keyring" && exiterror ; }
+    wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | gpg --batch --yes --dearmor -o /usr/share/keyrings/jenkins.gpg && logokay "Successfully installed ${Name} keyring" || { logerror "Failure installing ${Name} keyring" && exiterror ; }
 
     #Adding the repo to the sources of apt if not already
-    sh -c 'echo deb [signed-by=/usr/share/keyrings/jenkins.gpg] http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list' && logokay "Successfully installed jenkins repo" || { logerror "Failure installing jenkins repo" && exiterror ; }
+    sh -c 'echo deb [signed-by=/usr/share/keyrings/jenkins.gpg] http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list' && logokay "Successfully installed ${Name} repo" || { logerror "Failure installing ${Name} repo" && exiterror ; }
 
     #Update local apt repo database
     aptupdatelog
@@ -36,11 +39,11 @@ main(){
     #Install jenkins if not already
     aptinstalllog "jenkins"
 
-    #Enable the Jenkins service if not already
-    systemctl enable jenkins && logokay "Successfully enabled jenkins" || { logerror "Failure enabling jenkins" && exiterror ; }
+    #Enable the service if not already
+    systemctl enable jenkins && logokay "Successfully enabled ${Name}" || { logerror "Failure enabling ${Name}" && exiterror ; }
 
-    #Start the Jenkins service if not already
-    systemctl start jenkins && logokay "Successfully started jenkins" || { logerror "Failure starting jenkins" && exiterror ; }
+    #Start the service if not already
+    systemctl start jenkins && logokay "Successfully started ${Name}" || { logerror "Failure starting ${Name}" && exiterror ; }
 
     #Install nginx if not already
     aptinstalllog "nginx"
@@ -56,7 +59,7 @@ main(){
 }
 
 #Log start
-logokay "Running the install jenkins script"
+logokay "Running the install ${Name} script"
 
 #Check for admin permissions
 admincheck
@@ -65,7 +68,7 @@ admincheck
 main
 
 #Log successs
-logokay "Ran the install jenkins script successfully"
+logokay "Ran the install ${Name} script successfully"
 
 #Exit successs
 exit 0

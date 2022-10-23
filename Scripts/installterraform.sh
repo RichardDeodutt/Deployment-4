@@ -7,12 +7,13 @@
 #Source or import standard.sh
 source libstandard.sh
 
+#Name of main target
 Name='terraform'
 
 #Home directory
 Home='/home'
 
-#Log file name for installation
+#Log file name
 LogFileName="InstallTerraform.log"
 
 #Set the log file location and name
@@ -29,7 +30,7 @@ main(){
     #Update local apt repo database
     aptupdatelog
 
-    #Install jenkins if not already
+    #Install terraform if not already
     aptinstalllog "terraform"
 }
 

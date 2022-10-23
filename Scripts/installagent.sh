@@ -7,10 +7,13 @@
 #Source or import standard.sh
 source libstandard.sh
 
+#Name of main target
+Name='agent'
+
 #Home directory
 Home='/home'
 
-#Log file name for jenkins installation
+#Log file name
 LogFileName="InstallAgent.log"
 
 #The configuration for nginx
@@ -50,7 +53,7 @@ main(){
 }
 
 #Log start
-logokay "Running the install agent script"
+logokay "Running the install ${Name} script"
 
 #Check for admin permissions
 admincheck
@@ -59,7 +62,7 @@ admincheck
 main
 
 #Log successs
-logokay "Ran the install agent script successfully"
+logokay "Ran the install ${Name} script successfully"
 
 #Exit successs
 exit 0

@@ -7,10 +7,13 @@
 #Source or import standard.sh
 source libstandard.sh
 
+#Name of main target
+Name='cy depends'
+
 #Home directory
 Home='/home'
 
-#Log file name for the Cypress dependencies installation
+#Log file name
 LogFileName="InstallCyDepends.log"
 
 #Set the log file location and name
@@ -62,7 +65,7 @@ main(){
 }
 
 #Log start
-logokay "Running the install Cy Depends script"
+logokay "Running the install ${Name} script"
 
 #Check for admin permissions
 admincheck
@@ -71,7 +74,7 @@ admincheck
 main
 
 #Log successs
-logokay "Ran the install Cy Depends script successfully"
+logokay "Ran the install ${Name} script successfully"
 
 #Exit successs
 exit 0
