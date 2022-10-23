@@ -1,2 +1,2 @@
 region = "ap-northeast-1"
-bucketname = "terraform-remote-statefile"
+bucketname = "terraform-remote-statefile-store"
