@@ -4,6 +4,4 @@ itype = "t2.micro"
 publicip = true
 keyname = "Tokyo"
 secgroupname = "Jenkins Ports"
-bucketname = "Remote-Statefile"
-bucketacl = "private"
 ec2name = "Jenkins"

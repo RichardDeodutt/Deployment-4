@@ -28,16 +28,6 @@ variable "secgroupname"{
     default = "Jenkins Ports"
 }
 
-variable "bucketname"{
-    type = string
-    default = "Remote-Statefile"
-}
-
-variable "bucketacl"{
-    type = string
-    default = "private"
-}
-
 variable "ec2name"{
     type = string
     default = "Jenkins"
