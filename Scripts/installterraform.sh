@@ -11,7 +11,7 @@ source libstandard.sh
 Name='terraform'
 
 #Home directory
-Home='/home'
+Home='.'
 
 #Log file name
 LogFileName="InstallTerraform.log"

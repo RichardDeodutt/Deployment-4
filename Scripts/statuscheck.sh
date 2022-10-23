@@ -2,7 +2,7 @@
 
 #Richard Deodutt
 #09/26/2022
-#This script is meant to do a status check of the system after the deployment.
+#This script is meant to do a status check of the system.
 
 #Source or import standard.sh
 source libstandard.sh
@@ -11,7 +11,7 @@ source libstandard.sh
 Name='status check'
 
 #Home directory
-Home='/home'
+Home='.'
 
 #Log file name
 LogFileName="StatusCheck.log"

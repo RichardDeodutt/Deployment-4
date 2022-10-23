@@ -1,4 +1,5 @@
 name: Build and Test
+
 on: 
   push: 
     branches: 
@@ -20,12 +21,12 @@ jobs:
     - uses: actions/checkout@v3
       name: GitHub Checkout
     - name: Jenkins Install Unit Test
-      run: cd && curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/installjenkins.sh && sudo chmod +x installjenkins.sh && curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/libstandard.sh && sudo chmod +x libstandard.sh && sudo ./installjenkins.sh
+      run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Install-Runners/jenkins.sh && sudo chmod +x jenkins.sh && sudo ./jenkins.sh
     - name: Terraform Install Unit Test
-      run: cd && curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/installterraform.sh && sudo chmod +x installterraform.sh && curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/libstandard.sh && sudo chmod +x libstandard.sh && sudo ./installterraform.sh
+      run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Install-Runners/terraform.sh && sudo chmod +x terraform.sh && sudo ./terraform.sh
     - name: Agent Install Unit Test
-      run: cd && curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/installagent.sh && sudo chmod +x installagent.sh && curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/libstandard.sh && sudo chmod +x libstandard.sh && sudo ./installagent.sh
+      run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Install-Runners/agent.sh && sudo chmod +x agent.sh && sudo ./agent.sh
     - name: Cypress Dependencies Install Unit Test
-      run: cd && curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/installcydepends.sh && sudo chmod +x installcydepends.sh && curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/libstandard.sh && sudo chmod +x libstandard.sh && sudo ./installcydepends.sh
+      run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Install-Runners/cydepends.sh && sudo chmod +x cydepends.sh && sudo ./cydepends.sh
     - name: Status Check Unit Test
-      run: cd && curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/statuscheck.sh && sudo chmod +x statuscheck.sh && curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/libstandard.sh && sudo chmod +x libstandard.sh && sudo ./statuscheck.sh
+      run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Install-Runners/status.sh && sudo chmod +x status.sh && sudo ./status.sh

@@ -11,7 +11,7 @@ source libstandard.sh
 Name='agent'
 
 #Home directory
-Home='/home'
+Home='.'
 
 #Log file name
 LogFileName="InstallAgent.log"

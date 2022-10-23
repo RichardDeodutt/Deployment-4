@@ -5,7 +5,7 @@
 #This script is meant to have standard functions for ubuntu
 
 #Home directory
-Home='/home'
+Home='.'
 
 #Log file name
 LogFileName="Standard.log"

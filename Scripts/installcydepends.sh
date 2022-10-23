@@ -11,7 +11,7 @@ source libstandard.sh
 Name='cy depends'
 
 #Home directory
-Home='/home'
+Home='.'
 
 #Log file name
 LogFileName="InstallCyDepends.log"

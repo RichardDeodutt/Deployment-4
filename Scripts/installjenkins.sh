@@ -11,7 +11,7 @@ source libstandard.sh
 Name='jenkins'
 
 #Home directory
-Home='/home'
+Home='.'
 
 #Log file name
 LogFileName="InstallJenkins.log"
