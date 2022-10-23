@@ -7,8 +7,8 @@ terraform {
     }
     backend "s3" {
         encrypt = true
-        bucket = "Remote-Statefile"
-        dynamodb_table = "State-Table"
+        bucket = "remote-statefile"
+        dynamodb_table = "state-table"
         key = "terraform.tfstate"
         region = "ap-northeast-1"
     }
