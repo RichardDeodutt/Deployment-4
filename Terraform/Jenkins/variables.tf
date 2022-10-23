@@ -30,22 +30,12 @@ variable "secgroupname"{
 
 variable "bucketname"{
     type = string
-    default = "Tokyo"
+    default = "Remote-Statefile"
 }
 
 variable "bucketacl"{
     type = string
     default = "private"
-}
-
-variable "dyntable"{
-    type = string
-    default = "State-Table"
-}
-
-variable "statefile"{
-    type = string
-    default = "terraform.tfstate"
 }
 
 variable "ec2name"{

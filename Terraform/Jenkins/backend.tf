@@ -7,9 +7,9 @@ terraform {
     }
     backend "s3" {
         encrypt = true
-        bucket = var.bucketname
-        dynamodb_table = var.dyntable
-        key = var.statefile
-        region = var.region
+        bucket = "Remote-Statefile"
+        dynamodb_table = "State-Table"
+        key = "terraform.tfstate"
+        region = "ap-northeast-1"
     }
 }
