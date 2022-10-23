@@ -33,8 +33,8 @@ main(){
     #Install python3-pip if not already
     aptinstalllog "python3-pip"
 
-    #Install python3.10-venv if not already
-    aptinstalllog "python3.10-venv"
+    #Install python3-venv if not already
+    aptinstalllog "python3-venv"
 
     #Install nginx if not already
     aptinstalllog "nginx"

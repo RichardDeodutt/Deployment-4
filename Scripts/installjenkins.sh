@@ -40,10 +40,10 @@ main(){
     aptinstalllog "jenkins"
 
     #Enable the service if not already
-    systemctl enable jenkins && logokay "Successfully enabled ${Name}" || { logerror "Failure enabling ${Name}" && exiterror ; }
+    systemctl enable jenkins > /dev/null 2>&1 && logokay "Successfully enabled ${Name}" || { logerror "Failure enabling ${Name}" && exiterror ; }
 
     #Start the service if not already
-    systemctl start jenkins && logokay "Successfully started ${Name}" || { logerror "Failure starting ${Name}" && exiterror ; }
+    systemctl start jenkins > /dev/null 2>&1 && logokay "Successfully started ${Name}" || { logerror "Failure starting ${Name}" && exiterror ; }
 
     #Install nginx if not already
     aptinstalllog "nginx"
