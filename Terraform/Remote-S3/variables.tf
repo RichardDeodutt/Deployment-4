@@ -5,10 +5,5 @@ variable "region"{
 
 variable "bucketname"{
     type = string
-    default = "Remote-Statefile"
-}
-
-variable "bucketacl"{
-    type = string
-    default = "private"
+    default = "remote-statefile"
 }
