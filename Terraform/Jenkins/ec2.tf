@@ -18,7 +18,7 @@ resource "null_resource" "execute" {
         connection {
             host = aws_instance.jenkins.public_dns
             user = "ubuntu"
-            file = file("files/id_rsa")
+            private_key = file("files/id_rsa")
         }
         
         inline = ["curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstalljenkins.sh && sudo chmod +x runinstalljenkins.sh && sudo ./runinstalljenkins.sh"]
