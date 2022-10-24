@@ -8,6 +8,7 @@ on:
 env: 
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_SSH_KEY_BASE64: ${{ secrets.AWS_SSH_KEY_BASE64 }}
 
 jobs: 
   release-jenkins: 
@@ -20,9 +21,13 @@ jobs:
     steps: 
     - uses: actions/checkout@v3
       name: GitHub Checkout
+    - name: Decode and Save SSH Key
+      run: mkdir files && echo $AWS_SSH_KEY_BASE64 | base64 -i --decode > files/id_rsa
     - name: Terraform Init
       run: terraform init
     - name: Terraform Validate
       run: terraform validate
     - name: Terraform Destroy
       run: terraform destroy --auto-approve
+    - name: Delete SSH Key
+      run: rm files/id_rsa
