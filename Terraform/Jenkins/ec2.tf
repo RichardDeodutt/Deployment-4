@@ -21,6 +21,9 @@ resource "null_resource" "execute" {
             private_key = file("files/id_rsa")
         }
         
-        inline = ["curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstalljenkins.sh && sudo chmod +x runinstalljenkins.sh && sudo ./runinstalljenkins.sh"]
+        inline = [
+            "cloud-init status --wait",
+            "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstalljenkins.sh && sudo chmod +x runinstalljenkins.sh && sudo ./runinstalljenkins.sh"
+        ]
     }
 }

@@ -22,7 +22,7 @@ jobs:
     - uses: actions/checkout@v3
       name: GitHub Checkout
     - name: Decode and Save SSH Key
-      run: mkdir files && echo $AWS_SSH_KEY_BASE64 > key && cat key | base64 -i --decode > files/id_rsa && rm key
+      run: mkdir files && echo $AWS_SSH_KEY_BASE64 | base64 -i --decode > files/id_rsa
     - name: Terraform Init
       run: terraform init
     - name: Terraform Validate
