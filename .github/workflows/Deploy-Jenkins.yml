@@ -32,8 +32,8 @@ jobs:
     - name: Terraform Output
       run: terraform output -raw ec2publicip > files/ip
     - name: SSH Install Jenkins
-      run: ssh -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) su -c "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstalljenkins.sh && sudo chmod +x runinstalljenkins.sh && sudo ./runinstalljenkins.sh"
+      run: ssh -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -t "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstalljenkins.sh && sudo chmod +x runinstalljenkins.sh && sudo ./runinstalljenkins.sh"
     - name: SSH Status Check
-      run: ssh -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) su -c "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runstatuscheck.sh && sudo chmod +x runstatuscheck.sh && sudo ./runstatuscheck.sh"
+      run: ssh -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -t "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runstatuscheck.sh && sudo chmod +x runstatuscheck.sh && sudo ./runstatuscheck.sh"
     - name: Delete SSH Key and IP
       run: rm files/id_rsa && rm files/ip
