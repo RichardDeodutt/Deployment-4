@@ -3,15 +3,24 @@ resource "aws_instance" "jenkins" {
     instance_type = var.itype
     associate_public_ip_address = var.publicip
     key_name = var.keyname
-    user_data = <<EOF
-                #!/bin/bash
-                curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstalljenkins.sh && sudo chmod +x runinstalljenkins.sh && sudo ./runinstalljenkins.sh
-                EOF
+
     security_groups = [
         var.secgroupname
     ]
     
     tags = {
         Name = var.ec2name
+    }
+}
+
+resource "null_resource" "execute" {
+    provisioner "remote-exec" {
+        connection {
+            host = aws_instance.jenkins.public_dns
+            user = "ubuntu"
+            file = file("files/id_rsa")
+        }
+        
+        inline = ["curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstalljenkins.sh && sudo chmod +x runinstalljenkins.sh && sudo ./runinstalljenkins.sh"]
     }
 }
