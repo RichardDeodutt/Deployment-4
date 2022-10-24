@@ -23,7 +23,8 @@ resource "null_resource" "execute" {
         
         inline = [
             "echo 'Waiting for cloud-init to finish' && cloud-init status --wait",
-            "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstalljenkins.sh && sudo chmod +x runinstalljenkins.sh && sudo ./runinstalljenkins.sh"
+            "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstalljenkins.sh && sudo chmod +x runinstalljenkins.sh && sudo ./runinstalljenkins.sh",
+            "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runstatuscheck.sh && sudo chmod +x runstatuscheck.sh && sudo ./runstatuscheck.sh"
         ]
     }
 }
