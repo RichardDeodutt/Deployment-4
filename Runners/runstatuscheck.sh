@@ -26,7 +26,7 @@ admincheck(){
 #The main function
 main(){
     #RDGOAT = Run Directory Gather Organize All Together
-    mkdir RDGOAT ; cd RDGOAT ; curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/statuscheck.sh && chmod +x statuscheck.sh && curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/libstandard.sh && chmod +x libstandard.sh && ./statuscheck.sh
+    cd RDGOAT || mkdir RDGOAT && cd RDGOAT ; curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/statuscheck.sh && chmod +x statuscheck.sh && curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/libstandard.sh && chmod +x libstandard.sh && ./statuscheck.sh
 }
 
 #Check for admin permissions
