@@ -40,4 +40,4 @@ jobs:
     - name: Delete SSH Key and IP
       run: rm files/id_rsa && rm files/ip
     - name: Print Jenkins Link
-      run: echo "Jenkins Link ~>" && echo "http://$(terraform output -raw ec2publicip)/"
+      run: echo "Jenkins Link ~> http://$(terraform output -raw ec2publicip)/"
