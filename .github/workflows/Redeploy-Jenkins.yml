@@ -1,0 +1,54 @@
+name: Redeploy Jenkins
+
+on: 
+  workflow_dispatch: 
+    branches: 
+      - main
+
+env: 
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_SSH_KEY_BASE64: ${{ secrets.AWS_SSH_KEY_BASE64 }}
+  JENKINS_USERNAME: ${{ secrets.JENKINS_USERNAME }}
+  JENKINS_PASSWORD: ${{ secrets.JENKINS_PASSWORD }}
+  JENKINS_EMAIL: ${{ secrets.JENKINS_EMAIL }}
+
+jobs: 
+  redeploy-jenkins: 
+    name: Redeploy Jenkins using Terraform
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./Terraform/Jenkins
+    steps: 
+    - uses: actions/checkout@v3
+      name: GitHub Checkout
+    - name: Decode and Save SSH Key
+      run: mkdir files && echo $AWS_SSH_KEY_BASE64 | base64 -i --decode > files/id_rsa && chmod 600 files/id_rsa
+    - name: Terraform Init
+      run: terraform init
+    - name: Terraform Validate
+      run: terraform validate
+    - name: Terraform Destroy
+      run: terraform destroy --auto-approve
+    - name: Terraform Apply
+      run: terraform apply --auto-approve
+    - name: Terraform Output
+      run: terraform output -raw ec2publicip > files/ip
+    - name: SSH Add Credentials and IP
+      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; echo $JENKINS_USERNAME | sudo tee JENKINS_USERNAME > /dev/null 2>&1 && echo $JENKINS_PASSWORD | sudo tee JENKINS_PASSWORD > /dev/null 2>&1 && echo $JENKINS_EMAIL | sudo tee JENKINS_EMAIL > /dev/null 2>&1 && echo $(curl -s https://checkip.amazonaws.com) | sudo tee JENKINS_IP > /dev/null 2>&1"
+    - name: SSH Install Jenkins
+      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstalljenkins.sh && sudo chmod +x runinstalljenkins.sh && sudo ./runinstalljenkins.sh"
+    - name: SSH Configure Jenkins
+      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runconfigurejenkins.sh && sudo chmod +x runconfigurejenkins.sh && sudo ./runconfigurejenkins.sh"
+    - name: SSH Install Terraform
+      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstallterraform.sh && sudo chmod +x runinstallterraform.sh && sudo ./runinstallterraform.sh"
+    - name: SSH Status Check
+      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runstatuscheck.sh && sudo chmod +x runstatuscheck.sh && sudo ./runstatuscheck.sh"
+    - name: SSH Remove Credentials and IP
+      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; sudo rm JENKINS_USERNAME && sudo rm JENKINS_PASSWORD && sudo rm JENKINS_EMAIL && sudo rm JENKINS_IP"
+    - name: Delete SSH Key and IP
+      run: rm files/id_rsa && rm files/ip
+    - name: Jenkins Link
+      run: printf "\033[0;32mJenkins Link ~>\033[0m http://$(terraform output -raw ec2publicip)/\n"
