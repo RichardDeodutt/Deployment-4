@@ -22,6 +22,8 @@ jobs:
       name: GitHub Checkout
     - name: Jenkins Install Unit Test
       run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstalljenkins.sh && sudo chmod +x runinstalljenkins.sh && sudo ./runinstalljenkins.sh
+    - name: Jenkins Configure Unit Test
+      run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runconfigurejenkins.sh && sudo chmod +x runconfigurejenkins.sh && sudo ./runconfigurejenkins.sh
     - name: Terraform Install Unit Test
       run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstallterraform.sh && sudo chmod +x runinstallterraform.sh && sudo ./runinstallterraform.sh
     - name: Agent Install Unit Test
