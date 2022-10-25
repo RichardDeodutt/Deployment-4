@@ -54,6 +54,21 @@ main(){
     #Set the Username, Password, Email and IP for the configure groovy script placeholders
     cat "jenkins-configure.groovy" | sed "s/~JenkinsUsername~/$(cat JENKINS_USERNAME)/g" | sed "s/~JenkinsPassword~/$(cat JENKINS_PASSWORD)/g" | sed "s/~JenkinsEmail~/$(cat JENKINS_EMAIL)/g" | sed "s,~JenkinsIP~,$(cat JENKINS_IP),g" > "jenkins-configure.groovy" && logokay "Successfully set configure groovy script for ${Name}" || { logerror "Failure setting configure groovy script for ${Name}" && exiterror ; }
 
+    #Get the list of recommended plugins
+    curl -s -X GET https://raw.githubusercontent.com/jenkinsci/jenkins/master/core/src/main/resources/jenkins/install/platform-plugins.json -O && logokay "Successfully obtained the list of recommended plugins for ${Name}" || { logerror "Failure obtaining the list of recommended plugins for ${Name}" && exiterror ; }
+
+    #Narrow the list of suggested plugins
+    cat platform-plugins.json | grep suggested | cut -d ':' -f2 | cut -d ',' -f1 > SuggestedPlugins && logokay "Successfully narrowed the list of suggested plugins for ${Name}" || { logerror "Failure narrowing the list of suggested plugins for ${Name}" && exiterror ; }
+
+    #Go through the list of suggested plugins and add them to the configure groovy script
+    for (( i=1; i<=$(cat SuggestedPlugins | wc -l); i++ ))
+    do
+        echo "Jenkins.instance.updateCenter.getPlugin(sed -n $($i)p).deploy()" >> "jenkins-configure.groovy" && logokay "Successfully added $(sed -n $($i)p) to the plugins install list for ${Name}" || { logerror "Failure adding $(sed -n $($i)p) to the plugins install list for ${Name}" && exiterror ; }
+        echo "" >> "jenkins-configure.groovy"
+    done
+
+    cp "jenkins-configure.groovy" "jenkins-configure.groovy.tempback"
+
     #Remote execute the groovy script
     curl -s -b JenkinsSessionCookie -X POST http://localhost:8080/scriptText  -H "Jenkins-Crumb: $(cat JenkinsLastCrumb)" --user admin:$(cat /var/lib/jenkins/secrets/initialAdminPassword) --data-urlencode "script=$( < ./jenkins-configure.groovy)" > JenkinsExecution && test $(cat JenkinsExecution | wc -c) -eq 0 && logokay "Successfully executed configure groovy script for ${Name}" || { logerror "Failure executing configure groovy script for ${Name}" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; }
 
