@@ -58,7 +58,7 @@ main(){
     curl -s -X GET https://raw.githubusercontent.com/jenkinsci/jenkins/master/core/src/main/resources/jenkins/install/platform-plugins.json -O && logokay "Successfully obtained the list of recommended plugins for ${Name}" || { logerror "Failure obtaining the list of recommended plugins for ${Name}" && exiterror ; }
 
     #Narrow the list of suggested plugins
-    cat platform-plugins.json | grep suggested | cut -d ':' -f2 | cut -d ',' -f1 > SuggestedPlugins && logokay "Successfully narrowed the list of suggested plugins for ${Name}" || { logerror "Failure narrowing the list of suggested plugins for ${Name}" && exiterror ; }
+    cat platform-plugins.json | grep suggested | cut -d ':' -f2 | cut -d ',' -f1 | sed 's/^[[:space:]]*//g' > SuggestedPlugins && logokay "Successfully narrowed the list of suggested plugins for ${Name}" || { logerror "Failure narrowing the list of suggested plugins for ${Name}" && exiterror ; }
 
     #Go through the list of suggested plugins and add them to the configure groovy script
     for (( i=1; i<=$(cat SuggestedPlugins | wc -l); i++ ))
@@ -67,6 +67,8 @@ main(){
         echo "" >> "jenkins-configure.groovy"
         echo "Jenkins.instance.updateCenter.getPlugin($Plugin).deploy()" >> "jenkins-configure.groovy" && logokay "Successfully added $Plugin to the plugins install list for ${Name}" || { logerror "Failure adding $Plugin to the plugins install list for ${Name}" && exiterror ; }
     done
+
+    echo "" >> "jenkins-configure.groovy" && logokay "Successfully added all plugins to the plugins install list for ${Name}" || { logerror "Failure adding all plugins to the plugins install list for ${Name}" && exiterror ; }
 
     cp "jenkins-configure.groovy" "jenkins-configure.groovy.tempback"
 
