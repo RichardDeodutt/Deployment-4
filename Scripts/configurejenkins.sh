@@ -63,7 +63,7 @@ main(){
     #Go through the list of suggested plugins and add them to the configure groovy script
     for (( i=1; i<=$(cat SuggestedPlugins | wc -l); i++ ))
     do
-        echo "Jenkins.instance.updateCenter.getPlugin(sed -n $($i)p).deploy()" >> "jenkins-configure.groovy" && logokay "Successfully added $(sed -n $($i)p) to the plugins install list for ${Name}" || { logerror "Failure adding $(sed -n $($i)p) to the plugins install list for ${Name}" && exiterror ; }
+        echo "Jenkins.instance.updateCenter.getPlugin(sed -n $i'p').deploy()" >> "jenkins-configure.groovy" && logokay "Successfully added $(sed -n $i'p') to the plugins install list for ${Name}" || { logerror "Failure adding $(sed -n $i'p') to the plugins install list for ${Name}" && exiterror ; }
         echo "" >> "jenkins-configure.groovy"
     done
 
