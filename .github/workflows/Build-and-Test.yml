@@ -10,6 +10,7 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   JENKINS_USERNAME: ${{ secrets.JENKINS_USERNAME }}
   JENKINS_PASSWORD: ${{ secrets.JENKINS_PASSWORD }}
+  JENKINS_EMAIL: ${{ secrets.JENKINS_EMAIL }}
 
 jobs: 
   scripts-unit-tests: 
@@ -23,7 +24,7 @@ jobs:
     - uses: actions/checkout@v3
       name: GitHub Checkout
     - name: Add Credentials and IP
-      run: cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; echo '"'$JENKINS_USERNAME'"' > JENKINS_USERNAME && echo '"'$JENKINS_PASSWORD'"' > JENKINS_PASSWORD && echo '"'$(curl -s https://checkip.amazonaws.com)'"' > JENKINS_IP
+      run: cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; echo '"'$JENKINS_USERNAME'"' > JENKINS_USERNAME && echo '"'$JENKINS_PASSWORD'"' > JENKINS_PASSWORD && echo '"'$JENKINS_EMAIL'"' > JENKINS_EMAIL && echo '"'$(curl -s https://checkip.amazonaws.com)'"' > JENKINS_IP
     - name: Jenkins Install Unit Test
       run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstalljenkins.sh && sudo chmod +x runinstalljenkins.sh && sudo ./runinstalljenkins.sh
     - name: Jenkins Configure Unit Test
@@ -37,4 +38,4 @@ jobs:
     - name: Status Check Unit Test
       run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runstatuscheck.sh && sudo chmod +x runstatuscheck.sh && sudo ./runstatuscheck.sh
     - name: Remove Credentials and IP
-      run: cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; rm JENKINS_USERNAME && rm JENKINS_PASSWORD && rm JENKINS_IP
+      run: cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; rm JENKINS_USERNAME && rm JENKINS_PASSWORD && rm JENKINS_EMAIL && rm JENKINS_IP

@@ -20,3 +20,5 @@ Set up a CI/CD pipeline from start to finish using a Jenkins server and deployin
 - JENKINS_USERNAME
 
 - JENKINS_PASSWORD
+
+- JENKINS_EMAIL

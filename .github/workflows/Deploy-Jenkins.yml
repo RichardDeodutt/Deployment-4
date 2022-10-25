@@ -11,6 +11,7 @@ env:
   AWS_SSH_KEY_BASE64: ${{ secrets.AWS_SSH_KEY_BASE64 }}
   JENKINS_USERNAME: ${{ secrets.JENKINS_USERNAME }}
   JENKINS_PASSWORD: ${{ secrets.JENKINS_PASSWORD }}
+  JENKINS_EMAIL: ${{ secrets.JENKINS_EMAIL }}
 
 jobs: 
   deploy-jenkins: 
@@ -34,7 +35,7 @@ jobs:
     - name: Terraform Output
       run: terraform output -raw ec2publicip > files/ip
     - name: SSH Add Credentials and IP
-      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; echo $JENKINS_USERNAME | sudo tee JENKINS_USERNAME > /dev/null 2>&1 && echo $JENKINS_PASSWORD | sudo tee JENKINS_PASSWORD > /dev/null 2>&1 && echo $(curl -s https://checkip.amazonaws.com) | sudo tee JENKINS_IP > /dev/null 2>&1"
+      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; echo $JENKINS_USERNAME | sudo tee JENKINS_USERNAME > /dev/null 2>&1 && echo $JENKINS_PASSWORD | sudo tee JENKINS_PASSWORD > /dev/null 2>&1 && echo $JENKINS_EMAIL | sudo tee JENKINS_EMAIL > /dev/null 2>&1 && echo $(curl -s https://checkip.amazonaws.com) | sudo tee JENKINS_IP > /dev/null 2>&1"
     - name: SSH Install Jenkins
       run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstalljenkins.sh && sudo chmod +x runinstalljenkins.sh && sudo ./runinstalljenkins.sh"
     - name: SSH Configure Jenkins
@@ -44,7 +45,7 @@ jobs:
     - name: SSH Status Check
       run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runstatuscheck.sh && sudo chmod +x runstatuscheck.sh && sudo ./runstatuscheck.sh"
     - name: SSH Remove Credentials and IP
-      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; sudo rm JENKINS_USERNAME && sudo rm JENKINS_PASSWORD && sudo rm JENKINS_IP"
+      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; sudo rm JENKINS_USERNAME && sudo rm JENKINS_PASSWORD && sudo rm JENKINS_EMAIL && sudo rm JENKINS_IP"
     - name: Delete SSH Key and IP
       run: rm files/id_rsa && rm files/ip
     - name: Jenkins Link

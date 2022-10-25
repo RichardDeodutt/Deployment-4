@@ -36,8 +36,14 @@ JInstance.setAuthorizationStrategy(JStrategy)
 //Get the location config
 JURLConfig = JenkinsLocationConfiguration.get()
 
-//Set the location config, that's using a placeholder
+//Set the jenkins URL config, that's using a placeholder
 JURLConfig.setUrl(~JenkinsIP~)
+
+//Set the jenkins admin email config, that's using a placeholder
+JURLConfig.setUrl(~JenkinsEmail~)
+
+// set Jenkins admin email address
+jenkinsLocationConfiguration.setAdminAddress(jenkinsParameters.email)
 
 //Save the changes
 JURLConfig.save()
