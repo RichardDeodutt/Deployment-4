@@ -19,8 +19,27 @@ LogFileName="ConfigureJenkins.log"
 #Set the log file location and name
 setlogs
 
-#The configuration for nginx
-ConfigNginx="https://raw.githubusercontent.com/RichardDeodutt/Deployment-3/main/Configs/server-nginx-default"
+#The configuration for Jenkins
+ConfigJenkins="https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Configs/jenkins-configure.groovy"
+
+#The filename of the configuration file for Jenkins
+ConfigJenkinsFileName="jenkins-configure.groovy"
+
+#The list of recommended plugins
+RecommendedPluginsList="https://raw.githubusercontent.com/jenkinsci/jenkins/master/core/src/main/resources/jenkins/install/platform-plugins.json"
+
+#Jenkins Original Password Location
+InitialAdminPasswordLocation="/var/lib/jenkins/secrets/initialAdminPassword"
+#Jenkins Original Password
+InitialAdminPassword=$(cat $InitialAdminPasswordLocation)
+#Formatted Username
+JENKINS_USERNAME=$(cat JENKINS_USERNAME | sed 's/^/"/;s/$/"/')
+#Formatted Password
+JENKINS_PASSWORD=$(cat JENKINS_PASSWORD | sed 's/^/"/;s/$/"/')
+#Formatted Email
+JENKINS_EMAIL=$( printf "%s %s\n" $(cat JENKINS_USERNAME) $(cat JENKINS_EMAIL | sed 's/^/</;s/$/>/') | sed 's/^/"/;s/$/"/')
+#Formatted IP
+JENKINS_IP=$(echo "http://$(cat JENKINS_IP)/" | sed 's/^/"/;s/$/"/')
 
 #The main function
 main(){
@@ -37,49 +56,45 @@ main(){
     systemctl start jenkins > /dev/null 2>&1 && logokay "Successfully started ${Name}" || { logerror "Failure starting ${Name}" && exiterror ; }
 
     #Get a Jenkins crumb and a session cookie
-    curl -s -c JenkinsSessionCookie -X GET http://localhost:8080/crumbIssuer/api/json --user "admin:$(cat /var/lib/jenkins/secrets/initialAdminPassword)" | jq -r .crumb > JenkinsLastCrumb && logokay "Successfully obtained a crumb and a session cookie for ${Name}" || { logerror "Failure obtaining crumb and a session cookie for ${Name}" && exiterror ; }
+    curl -s -c JenkinsSessionCookie -X GET http://localhost:8080/crumbIssuer/api/json --user "admin:$InitialAdminPassword" | jq -r .crumb > JenkinsLastCrumb && logokay "Successfully obtained a crumb and a session cookie for ${Name}" || { logerror "Failure obtaining crumb and a session cookie for ${Name}" && exiterror ; }
 
     #Get the Jenkins configure groovy script
-    curl -s -X GET https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Configs/jenkins-configure.groovy -O && logokay "Successfully obtained configure groovy script for ${Name}" || { logerror "Failure obtaining configure groovy script for ${Name}" && exiterror ; }
-
-    #Format Email
-    cat JENKINS_EMAIL | sed 's/^/</;s/$/>/' > JENKINS_EMAIL_TEMP && echo "$(cat JENKINS_USERNAME) $(cat JENKINS_EMAIL_TEMP)" > JENKINS_EMAIL && rm JENKINS_EMAIL_TEMP && logokay "Successfully formatted email for ${Name}" || { logerror "Failure formatting email for ${Name}" && exiterror ; }
-
-    #Format IP
-    mv JENKINS_IP JENKINS_IP_TEMP && echo "http://$(cat JENKINS_IP_TEMP)/" > JENKINS_IP && rm JENKINS_IP_TEMP && logokay "Successfully formatted IP for ${Name}" || { logerror "Failure formatting IP for ${Name}" && exiterror ; }
-
-    #Add Quotes to the Username, Password, Email and IP
-    cat JENKINS_USERNAME | sed 's/^/"/;s/$/"/' > JENKINS_USERNAME_TEMP && cat JENKINS_PASSWORD | sed 's/^/"/;s/$/"/' > JENKINS_PASSWORD_TEMP && cat JENKINS_EMAIL | sed 's/^/"/;s/$/"/' > JENKINS_EMAIL_TEMP && cat JENKINS_IP | sed 's/^/"/;s/$/"/' > JENKINS_IP_TEMP && mv JENKINS_USERNAME_TEMP JENKINS_USERNAME && mv JENKINS_PASSWORD_TEMP JENKINS_PASSWORD && mv JENKINS_EMAIL_TEMP JENKINS_EMAIL && mv JENKINS_IP_TEMP JENKINS_IP && logokay "Successfully added quotes to the Username, Password and IP for ${Name}" || { logerror "Failure adding quotes to the Username, Password and IP for ${Name}" && exiterror ; }
+    curl -s -X GET $ConfigJenkins -O && logokay "Successfully obtained configure groovy script for ${Name}" || { logerror "Failure obtaining configure groovy script for ${Name}" && exiterror ; }
 
     #Set the Username, Password, Email and IP for the configure groovy script placeholders
-    cat "jenkins-configure.groovy" | sed "s/~JenkinsUsername~/$(cat JENKINS_USERNAME)/g" | sed "s/~JenkinsPassword~/$(cat JENKINS_PASSWORD)/g" | sed "s/~JenkinsEmail~/$(cat JENKINS_EMAIL)/g" | sed "s,~JenkinsIP~,$(cat JENKINS_IP),g" > "jenkins-configure.groovy" && logokay "Successfully set configure groovy script for ${Name}" || { logerror "Failure setting configure groovy script for ${Name}" && exiterror ; }
+    cat $ConfigJenkinsFileName | sed "s/~JenkinsUsername~/$JENKINS_USERNAME/g" | sed "s/~JenkinsPassword~/$JENKINS_PASSWORD/g" | sed "s/~JenkinsEmail~/$JENKINS_EMAIL/g" | sed "s,~JenkinsIP~,$JENKINS_IP,g" > $ConfigJenkinsFileName && logokay "Successfully set configure groovy script for ${Name}" || { logerror "Failure setting configure groovy script for ${Name}" && exiterror ; }
 
     #Get the list of recommended plugins
-    curl -s -X GET https://raw.githubusercontent.com/jenkinsci/jenkins/master/core/src/main/resources/jenkins/install/platform-plugins.json -O && logokay "Successfully obtained the list of recommended plugins for ${Name}" || { logerror "Failure obtaining the list of recommended plugins for ${Name}" && exiterror ; }
+    curl -s -X GET $RecommendedPluginsList -O && logokay "Successfully obtained the list of recommended plugins for ${Name}" || { logerror "Failure obtaining the list of recommended plugins for ${Name}" && exiterror ; }
 
     #Narrow the list of suggested plugins
-    cat platform-plugins.json | grep suggested | cut -d ':' -f2 | cut -d ',' -f1 | sed 's/^[[:space:]]*//g' > SuggestedPlugins && logokay "Successfully narrowed the list of suggested plugins for ${Name}" || { logerror "Failure narrowing the list of suggested plugins for ${Name}" && exiterror ; }
+    cat platform-plugins.json | grep suggested | cut -d ':' -f2 | cut -d ',' -f1 | sed 's/^[[:space:]]*//g' | sed 's/"//g' > SuggestedPlugins && logokay "Successfully narrowed the list of suggested plugins for ${Name}" || { logerror "Failure narrowing the list of suggested plugins for ${Name}" && exiterror ; }
 
     #Go through the list of suggested plugins and add them to the configure groovy script
     for (( i=1; i<=$(cat SuggestedPlugins | wc -l); i++ ))
     do
-        Plugin=$(cat SuggestedPlugins | sed -n $i'p')
-        echo "" >> "jenkins-configure.groovy"
-        echo "Jenkins.instance.updateCenter.getPlugin($Plugin).deploy()" >> "jenkins-configure.groovy" && logokay "Successfully added $Plugin to the plugins install list for ${Name}" || { logerror "Failure adding $Plugin to the plugins install list for ${Name}" && exiterror ; }
+        Plugin=$(cat SuggestedPlugins | sed -n $i'p' | sed 's/^/"/;s/$/"/')
+        echo "" >> $ConfigJenkinsFileName
+        echo "Jenkins.instance.updateCenter.getPlugin($Plugin).deploy()" >> $ConfigJenkinsFileName && logokay "Successfully added $Plugin to the plugins install list for ${Name}" || { logerror "Failure adding $Plugin to the plugins install list for ${Name}" && exiterror ; }
     done
 
-    echo "" >> "jenkins-configure.groovy" && logokay "Successfully added all plugins to the plugins install list for ${Name}" || { logerror "Failure adding all plugins to the plugins install list for ${Name}" && exiterror ; }
+    #Added all suggested plugins to the install list
+    echo "" >> $ConfigJenkinsFileName && logokay "Successfully added all plugins to the plugins install list for ${Name}" || { logerror "Failure adding all plugins to the plugins install list for ${Name}" && exiterror ; }
 
-    echo "return null" >> "jenkins-configure.groovy" && logokay "Successfully completed config script for ${Name}" || { logerror "Failure completing config script for ${Name}" && exiterror ; }
+    #Config script is completed
+    echo "return null\n" >> $ConfigJenkinsFileName && logokay "Successfully completed config script for ${Name}" || { logerror "Failure completing config script for ${Name}" && exiterror ; }
+
+    #Temp Stop
+    exit 1 #Stop!
 
     #Remote execute the groovy script
-    curl -s -b JenkinsSessionCookie -X POST http://localhost:8080/scriptText  -H "Jenkins-Crumb: $(cat JenkinsLastCrumb)" --user admin:$(cat /var/lib/jenkins/secrets/initialAdminPassword) --data-urlencode "script=$( < ./jenkins-configure.groovy)" > JenkinsExecution && test $(cat JenkinsExecution | wc -c) -eq 0 && logokay "Successfully executed configure groovy script for ${Name}" || { logerror "Failure executing configure groovy script for ${Name}" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; }
+    curl -s -b JenkinsSessionCookie -X POST http://localhost:8080/scriptText -H "Jenkins-Crumb: $(cat JenkinsLastCrumb)" --user admin:$InitialAdminPassword --data-urlencode "script=$( < ./$ConfigJenkinsFileName)" > JenkinsExecution && test $(cat JenkinsExecution | wc -c) -eq 0 && logokay "Successfully executed configure groovy script for ${Name}" || { logerror "Failure executing configure groovy script for ${Name}" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; }
 
     #Remove configure groovy script
-    rm jenkins-configure.groovy && logokay "Successfully removed configure groovy script for ${Name}" || { logerror "Failure removing configure groovy script for ${Name}" && exiterror ; }
+    rm $ConfigJenkinsFileName && logokay "Successfully removed configure groovy script for ${Name}" || { logerror "Failure removing configure groovy script for ${Name}" && exiterror ; }
 
     #Remove initialAdminPassword and JenkinsExecution
-    rm /var/lib/jenkins/secrets/initialAdminPassword ; rm JenkinsExecution && logokay "Successfully removed initialAdminPassword for ${Name}" || { logerror "Failure removing initialAdminPassword for ${Name}" && exiterror ; }
+    rm $InitialAdminPasswordLocation ; rm JenkinsExecution && logokay "Successfully removed initialAdminPassword for ${Name}" || { logerror "Failure removing initialAdminPassword for ${Name}" && exiterror ; }
 }
 
 #Log start
