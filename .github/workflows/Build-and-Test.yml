@@ -22,7 +22,7 @@ jobs:
     steps: 
     - uses: actions/checkout@v3
       name: GitHub Checkout
-    - name: Add Credentials
+    - name: Add Credentials and IP
       run: cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; echo '"'$JENKINS_USERNAME'"' > JENKINS_USERNAME && echo '"'$JENKINS_PASSWORD'"' > JENKINS_PASSWORD && echo '"'$(curl -s https://checkip.amazonaws.com)'"' > JENKINS_IP
     - name: Jenkins Install Unit Test
       run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstalljenkins.sh && sudo chmod +x runinstalljenkins.sh && sudo ./runinstalljenkins.sh
@@ -36,5 +36,5 @@ jobs:
       run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstallcydepends.sh && sudo chmod +x runinstallcydepends.sh && sudo ./runinstallcydepends.sh
     - name: Status Check Unit Test
       run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runstatuscheck.sh && sudo chmod +x runstatuscheck.sh && sudo ./runstatuscheck.sh
-    - name: Remove Credentials
-      run: cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; rm JENKINS_USERNAME && rm JENKINS_PASSWORD
+    - name: Remove Credentials and IP
+      run: cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; rm JENKINS_USERNAME && rm JENKINS_PASSWORD && rm JENKINS_IP
