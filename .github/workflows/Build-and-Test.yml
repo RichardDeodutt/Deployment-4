@@ -37,4 +37,4 @@ jobs:
     - name: Status Check Unit Test
       run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runstatuscheck.sh && sudo chmod +x runstatuscheck.sh && sudo ./runstatuscheck.sh
     - name: Remove Credentials
-      run: cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } rm JENKINS_USERNAME && rm JENKINS_PASSWORD
+      run: cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; rm JENKINS_USERNAME && rm JENKINS_PASSWORD

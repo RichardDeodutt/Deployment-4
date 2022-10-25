@@ -44,6 +44,6 @@ jobs:
     - name: Delete SSH Key and IP
       run: rm files/id_rsa && rm files/ip
     - name: SSH Remove Credentials
-      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } rm JENKINS_USERNAME && rm JENKINS_PASSWORD"
+      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; rm JENKINS_USERNAME && rm JENKINS_PASSWORD"
     - name: Jenkins Link
       run: printf "\033[0;32mJenkins Link ~>\033[0m http://$(terraform output -raw ec2publicip)/\n"
