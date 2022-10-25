@@ -26,7 +26,7 @@ admincheck(){
 #The main function
 main(){
     #RDGOAT = Run Directory Gather Organize All Together
-    cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/installterraform.sh && chmod +x installterraform.sh && curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/libstandard.sh && chmod +x libstandard.sh && ./installterraform.sh
+    cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/installterraform.sh && chmod +x installterraform.sh && curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Scripts/libstandard.sh && chmod +x libstandard.sh && ./installterraform.sh || exiterror
 }
 
 #Check for admin permissions
