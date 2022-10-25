@@ -55,7 +55,7 @@ main(){
     rm jenkins-configure.groovy && logokay "Successfully removed configure groovy script for ${Name}" || { logerror "Failure removing configure groovy script for ${Name}" && exiterror ; }
 
     #Remove initialAdminPassword and JenkinsExecution
-    #rm /var/lib/jenkins/secrets/initialAdminPassword ; rm JenkinsExecution && logokay "Successfully removed initialAdminPassword for ${Name}" || { logerror "Failure removing initialAdminPassword for ${Name}" && exiterror ; }
+    rm /var/lib/jenkins/secrets/initialAdminPassword ; rm JenkinsExecution && logokay "Successfully removed initialAdminPassword for ${Name}" || { logerror "Failure removing initialAdminPassword for ${Name}" && exiterror ; }
 }
 
 #Log start
