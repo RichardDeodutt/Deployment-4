@@ -40,10 +40,7 @@ JURLConfig = JenkinsLocationConfiguration.get()
 JURLConfig.setUrl(~JenkinsIP~)
 
 //Set the jenkins admin email config, that's using a placeholder
-JURLConfig.setUrl(~JenkinsEmail~)
-
-// set Jenkins admin email address
-jenkinsLocationConfiguration.setAdminAddress(jenkinsParameters.email)
+JURLConfig.setAdminAddress(~JenkinsEmail~)
 
 //Save the changes
 JURLConfig.save()
