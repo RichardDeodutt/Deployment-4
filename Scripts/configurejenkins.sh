@@ -43,7 +43,7 @@ main(){
     curl -s -X GET https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Configs/jenkins-configure.groovy -O && logokay "Successfully obtained configure groovy script for ${Name}" || { logerror "Failure obtaining configure groovy script for ${Name}" && exiterror ; }
 
     #Format Email
-    mv JENKINS_EMAIL JENKINS_EMAIL_TEMP && echo "$(cat $JENKINS_USERNAME) <$(cat $JENKINS_EMAIL_TEMP)>" > JENKINS_EMAIL && rm JENKINS_EMAIL_TEMP && logokay "Successfully formatted email for ${Name}" || { logerror "Failure formatting email for ${Name}" && exiterror ; }
+    cat JENKINS_EMAIL | sed 's/^/</;s/$/>/' > JENKINS_EMAIL_TEMP && echo "$(cat $JENKINS_USERNAME) $(cat $JENKINS_EMAIL_TEMP)" > JENKINS_EMAIL && rm JENKINS_EMAIL_TEMP && logokay "Successfully formatted email for ${Name}" || { logerror "Failure formatting email for ${Name}" && exiterror ; }
 
     #Format IP
     mv JENKINS_IP JENKINS_IP_TEMP && echo "http://$(cat $JENKINS_IP_TEMP)/" > JENKINS_IP && rm JENKINS_IP_TEMP && logokay "Successfully formatted IP for ${Name}" || { logerror "Failure formatting IP for ${Name}" && exiterror ; }
