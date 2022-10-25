@@ -70,7 +70,9 @@ main(){
 
     echo "" >> "jenkins-configure.groovy" && logokay "Successfully added all plugins to the plugins install list for ${Name}" || { logerror "Failure adding all plugins to the plugins install list for ${Name}" && exiterror ; }
 
-    cp "jenkins-configure.groovy" "jenkins-configure.groovy.tempback"
+    echo "Jenkins.instance.updateCenter.doSafeRestart()" >> "jenkins-configure.groovy" && logokay "Successfully scheduled a safe restart for ${Name}" || { logerror "Failure scheduling a safe restart for ${Name}" && exiterror ; }
+
+    echo "" >> "jenkins-configure.groovy" && logokay "Successfully completed config script for ${Name}" || { logerror "Failure completing config script for ${Name}" && exiterror ; }
 
     #Remote execute the groovy script
     curl -s -b JenkinsSessionCookie -X POST http://localhost:8080/scriptText  -H "Jenkins-Crumb: $(cat JenkinsLastCrumb)" --user admin:$(cat /var/lib/jenkins/secrets/initialAdminPassword) --data-urlencode "script=$( < ./jenkins-configure.groovy)" > JenkinsExecution && test $(cat JenkinsExecution | wc -c) -eq 0 && logokay "Successfully executed configure groovy script for ${Name}" || { logerror "Failure executing configure groovy script for ${Name}" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; }
