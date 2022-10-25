@@ -23,7 +23,7 @@ jobs:
     - uses: actions/checkout@v3
       name: GitHub Checkout
     - name: Add Credentials
-      run: cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; echo '"'$JENKINS_USERNAME'"' > JENKINS_USERNAME && echo '"'$JENKINS_PASSWORD'"' > JENKINS_PASSWORD
+      run: cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; echo '"'$JENKINS_USERNAME'"' > JENKINS_USERNAME && echo '"'$JENKINS_PASSWORD'"' > JENKINS_PASSWORD && echo '"'$(curl -s https://checkip.amazonaws.com)'"' > JENKINS_IP
     - name: Jenkins Install Unit Test
       run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstalljenkins.sh && sudo chmod +x runinstalljenkins.sh && sudo ./runinstalljenkins.sh
     - name: Jenkins Configure Unit Test

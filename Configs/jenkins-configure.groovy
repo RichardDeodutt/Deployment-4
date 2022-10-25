@@ -33,6 +33,15 @@ JStrategy.setAllowAnonymousRead(false)
 //Apply the strategy containing the created user to the running jenkins instance
 JInstance.setAuthorizationStrategy(JStrategy)
 
+//Get the location config
+JURLConfig = JenkinsLocationConfiguration.get()
+
+//Set the location config, that's using a placeholder
+JURLConfig.setUrl(~JenkinsIP~)
+
+//Save the changes
+JURLConfig.save()
+
 //Set the state of installation to completed skipping setup
 JInstance.setInstallState(InstallState.INITIAL_SETUP_COMPLETED)
 
