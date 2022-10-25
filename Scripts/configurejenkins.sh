@@ -37,7 +37,7 @@ main(){
     systemctl start jenkins > /dev/null 2>&1 && logokay "Successfully started ${Name}" || { logerror "Failure starting ${Name}" && exiterror ; }
 
     #Get a Jenkins crumb and a session cookie
-    curl -s -c JenkinsSessionCookie -X GET http://localhost:8080/crumbIssuer/api/json --user "admin:$(cat /var/lib/jenkins/secrets/initialAdminPassword)" | jq -r .crumb > JenkinsLastCrumb && logokay "Successfully obtained crumb and a session cookie for ${Name}" || { logerror "Failure obtaining crumb and a session cookie for ${Name}" && exiterror ; }
+    curl -s -c JenkinsSessionCookie -X GET http://localhost:8080/crumbIssuer/api/json --user "admin:$(cat /var/lib/jenkins/secrets/initialAdminPassword)" | jq -r .crumb > JenkinsLastCrumb && logokay "Successfully obtained a crumb and a session cookie for ${Name}" || { logerror "Failure obtaining crumb and a session cookie for ${Name}" && exiterror ; }
 
     #Get the Jenkins configure groovy script
     curl -s -X GET https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Configs/jenkins-configure.groovy -O && logokay "Successfully obtained configure groovy script for ${Name}" || { logerror "Failure obtaining configure groovy script for ${Name}" && exiterror ; }
