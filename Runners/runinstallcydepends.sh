@@ -7,7 +7,7 @@
 #Function to exit with a error code
 exiterror(){
     #Log error
-    echo "Something went wrong. exiting"
+    echo "Something went wrong running the script. exiting"
     #Exit with error
     exit 1
 }
