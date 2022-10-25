@@ -82,7 +82,7 @@ main(){
     echo "" >> $ConfigJenkinsFileName && logokay "Successfully added all plugins to the plugins install list for ${Name}" || { logerror "Failure adding all plugins to the plugins install list for ${Name}" && exiterror ; }
 
     #Config script is completed
-    echo "return null\n" >> $ConfigJenkinsFileName && logokay "Successfully completed config script for ${Name}" || { logerror "Failure completing config script for ${Name}" && exiterror ; }
+    echo "return null" >> $ConfigJenkinsFileName && echo "" >> $ConfigJenkinsFileName && logokay "Successfully completed config script for ${Name}" || { logerror "Failure completing config script for ${Name}" && exiterror ; }
 
     #Temp Stop
     exit 1 #Stop!
