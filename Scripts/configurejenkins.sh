@@ -46,7 +46,9 @@ main(){
     cat "jenkins-configure.groovy" | sed "s/~JenkinsUsername~/$(cat JENKINS_USERNAME)/g" | sed "s/~JenkinsPassword~/$(cat JENKINS_PASSWORD)/g" > "jenkins-configure.groovy" && logokay "Successfully set configure groovy script for ${Name}" || { logerror "Failure setting configure groovy script for ${Name}" && exiterror ; }
 
     #Remote execute the groovy script
-    test $(curl -s -b JenkinsSessionCookie -X POST http://localhost:8080/scriptText  -H "Jenkins-Crumb: $(cat JenkinsLastCrumb)" --user admin:$(cat /var/lib/jenkins/secrets/initialAdminPassword) --data-urlencode "script=$( < ./jenkins-configure.groovy)" | wc -c) -eq 0 && logokay "Successfully executed configure groovy script for ${Name}" || { logerror "Failure executing configure groovy script for ${Name}" && exiterror ; }
+    #test $(
+    # | wc -c) -eq 0 &&
+    curl -s -b JenkinsSessionCookie -X POST http://localhost:8080/scriptText  -H "Jenkins-Crumb: $(cat JenkinsLastCrumb)" --user admin:$(cat /var/lib/jenkins/secrets/initialAdminPassword) --data-urlencode "script=$( < ./jenkins-configure.groovy)" logokay "Successfully executed configure groovy script for ${Name}" || { logerror "Failure executing configure groovy script for ${Name}" && exiterror ; }
 
     #Remove configure groovy script
     rm jenkins-configure.groovy && logokay "Successfully removed configure groovy script for ${Name}" || { logerror "Failure removing configure groovy script for ${Name}" && exiterror ; }
