@@ -42,6 +42,9 @@ main(){
     #Get the Jenkins configure groovy script
     curl -s -X GET https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Configs/jenkins-configure.groovy -O && logokay "Successfully obtained configure groovy script for ${Name}" || { logerror "Failure obtaining configure groovy script for ${Name}" && exiterror ; }
 
+    #Add Quotes to the Username and Password
+    cat JENKINS_USERNAME | sed 's/^/"/;s/$/"/' > JENKINS_USERNAME_TEMP && cat JENKINS_PASSWORD | sed 's/^/"/;s/$/"/' > JENKINS_PASSWORD_TEMP && mv JENKINS_USERNAME_TEMP JENKINS_USERNAME && mv JENKINS_PASSWORD_TEMP JENKINS_PASSWORD && logokay "Successfully added quotes to the Username and Password for ${Name}" || { logerror "Failure adding quotes to the Username and Password for ${Name}" && exiterror ; }
+
     #Set the Username and Password for the configure groovy script placeholders
     cat "jenkins-configure.groovy" | sed "s/~JenkinsUsername~/$(cat JENKINS_USERNAME)/g" | sed "s/~JenkinsPassword~/$(cat JENKINS_PASSWORD)/g" > "jenkins-configure.groovy" && logokay "Successfully set configure groovy script for ${Name}" || { logerror "Failure setting configure groovy script for ${Name}" && exiterror ; }
 
