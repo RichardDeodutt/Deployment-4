@@ -19,10 +19,13 @@ JHudsonRealm.createAccount(~JenkinsUsername~, ~JenkinsPassword~)
 JInstance.setSecurityRealm(JHudsonRealm)
 
 //Needs a strategy to include admin access
-def JStrategy = new hudson.security.GlobalMatrixAuthorizationStrategy()
+def JStrategy = new FullControlOnceLoggedInAuthorizationStrategy()
 
 //Add the user to the strategy and give admin permissions
 JStrategy.add(Jenkins.ADMINISTER, ~JenkinsUsername~)
+
+//Extra Security
+JStrategy.setAllowAnonymousRead(false)
 
 //Apply the strategy containing the created user to the running jenkins instance
 JInstance.setAuthorizationStrategy(JStrategy)
