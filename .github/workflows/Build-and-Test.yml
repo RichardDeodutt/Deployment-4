@@ -8,6 +8,8 @@ on:
 env: 
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  JENKINS_PASSWORD: ${{ secrets.JENKINS_PASSWORD }}
+  JENKINS_USERNAME: ${{ secrets.JENKINS_USERNAME }}
 
 jobs: 
   scripts-unit-tests: 
@@ -20,6 +22,8 @@ jobs:
     steps: 
     - uses: actions/checkout@v3
       name: GitHub Checkout
+    - name: Add Credentials
+      run: cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; echo '"'$JENKINS_USERNAME'"' > JENKINS_USERNAME && echo '"'$JENKINS_PASSWORD'"' > JENKINS_PASSWORD
     - name: Jenkins Install Unit Test
       run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstalljenkins.sh && sudo chmod +x runinstalljenkins.sh && sudo ./runinstalljenkins.sh
     - name: Jenkins Configure Unit Test
@@ -32,3 +36,5 @@ jobs:
       run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstallcydepends.sh && sudo chmod +x runinstallcydepends.sh && sudo ./runinstallcydepends.sh
     - name: Status Check Unit Test
       run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runstatuscheck.sh && sudo chmod +x runstatuscheck.sh && sudo ./runstatuscheck.sh
+    - name: Remove Credentials
+      run: cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } rm JENKINS_USERNAME && rm JENKINS_PASSWORD
