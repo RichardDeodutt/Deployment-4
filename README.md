@@ -7,7 +7,7 @@ Set up a CI/CD pipeline from start to finish using a Jenkins server and deployin
 
 - Maybe Ansible to configure Jenkins
 
-- Automate Jenkins Configure
+- Automate Jenkins Configure Recommended Plugins
 
 # Secrets/Variables
 

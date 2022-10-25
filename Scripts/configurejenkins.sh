@@ -42,6 +42,9 @@ main(){
     #Get the Jenkins configure groovy script
     curl -s -X GET https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Configs/jenkins-configure.groovy -O && logokay "Successfully obtained configure groovy script for ${Name}" || { logerror "Failure obtaining configure groovy script for ${Name}" && exiterror ; }
 
+    #Format Email
+    mv JENKINS_EMAIL JENKINS_EMAIL_TEMP && echo "$JENKINS_USERNAME <$JENKINS_EMAIL_TEMP>" > JENKINS_EMAIL && rm JENKINS_EMAIL_TEMP && logokay "Successfully formatted email for ${Name}" || { logerror "Failure formatting email for ${Name}" && exiterror ; }
+
     #Add Quotes to the Username, Password, Email and IP
     cat JENKINS_USERNAME | sed 's/^/"/;s/$/"/' > JENKINS_USERNAME_TEMP && cat JENKINS_PASSWORD | sed 's/^/"/;s/$/"/' > JENKINS_PASSWORD_TEMP && cat JENKINS_EMAIL | sed 's/^/"/;s/$/"/' > JENKINS_EMAIL_TEMP && cat JENKINS_IP | sed 's/^/"/;s/$/"/' > JENKINS_IP_TEMP && mv JENKINS_USERNAME_TEMP JENKINS_USERNAME && mv JENKINS_PASSWORD_TEMP JENKINS_PASSWORD && mv JENKINS_EMAIL_TEMP JENKINS_EMAIL && mv JENKINS_IP_TEMP JENKINS_IP && logokay "Successfully added quotes to the Username, Password and IP for ${Name}" || { logerror "Failure adding quotes to the Username, Password and IP for ${Name}" && exiterror ; }
 
