@@ -37,7 +37,7 @@ Retry=15
 Timeout=600
 
 #Jenkins cli jar file name
-JCJ = "jenkins-cli.jar"
+JCJ="jenkins-cli.jar"
 
 #The main function
 main(){
@@ -70,7 +70,7 @@ main(){
     sleep $Retry
 
     #Remote check the updateCenter jobs, refresh jobs and store to file
-    curl -s -g -b JenkinsSessionCookie -X GET "http://localhost:8080/updateCenter/api/json?tree=jobs[*]" -H "Jenkins-Crumb: $(cat JenkinsLastCrumb)" --user $JENKINS_USERNAME:$JENKINS_PASSWORD | jq -r '. | .jobs | .[].status._class? // empty' | sed 's/hudson.model.UpdateCenter$DownloadJob$SuccessButRequiresRestart//g' | sed 's/hudson.model.UpdateCenter$DownloadJob$Success//g' | sed '/^$/d' > JenkinsExecution && logokay "Successfully checked jobs for ${Name}, $(printwarning $(cat JenkinsExecution | wc -l)) $(printokay 'jobs left')" || { logerror "Failure checking jobs for ${Name}" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; }
+    curl -s -g -b JenkinsSessionCookie -X GET "http://localhost:8080/updateCenter/api/json?tree=jobs[*]" -H "Jenkins-Crumb: $(cat JenkinsLastCrumb)" --user $JENKINS_USERNAME:$JENKINS_PASSWORD | jq -r '. | .jobs | .[].status._class? // empty' | sed 's/hudson.model.UpdateCenter$DownloadJob$SuccessButRequiresRestart//g' | sed 's/hudson.model.UpdateCenter$DownloadJob$Success//g' | sed '/^$/d' > JenkinsExecution && logokay "Successfully checked jobs for ${Name} $(printwarning $(cat JenkinsExecution | wc -l)) $(printokay 'jobs left')" || { logerror "Failure checking jobs for ${Name}" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; }
 
     #Store the pending jobs as a variable and refresh it
     PendingJobs=$(cat JenkinsExecution)
