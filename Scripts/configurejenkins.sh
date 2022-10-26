@@ -69,8 +69,6 @@ main(){
     #Set the Username, Password, Email and IP for the configure groovy script placeholders
     echo "$LoadedInitialConfigJenkins" | sed "s/~JenkinsUsername~/$JENKINS_USERNAME/g" | sed "s/~JenkinsPassword~/$JENKINS_PASSWORD/g" | sed "s/~JenkinsEmail~/$JENKINS_EMAIL/g" | sed "s,~JenkinsIP~,$JENKINS_IP,g" > $ConfigJenkinsFileName && logokay "Successfully set configure groovy script for ${Name}" || { logerror "Failure setting configure groovy script for ${Name}" && exiterror ; }
 
-    cat "$ConfigJenkinsFileName"
-
     #Get the list of recommended plugins
     curl -s -X GET $RecommendedPluginsList -O && logokay "Successfully obtained the list of recommended plugins for ${Name}" || { logerror "Failure obtaining the list of recommended plugins for ${Name}" && exiterror ; }
 
@@ -82,6 +80,7 @@ main(){
     do
         Plugin=$(cat SuggestedPlugins | sed -n $i'p' | sed 's/^/"/;s/$/"/')
         echo "" >> $ConfigJenkinsFileName
+        echo "//Install plugin $Plugin" >> $ConfigJenkinsFileName
         echo "Jenkins.instance.updateCenter.getPlugin($Plugin).deploy()" >> $ConfigJenkinsFileName && logokay "Successfully added $Plugin to the plugins install list for ${Name}" || { logerror "Failure adding $Plugin to the plugins install list for ${Name}" && exiterror ; }
     done
 
@@ -89,7 +88,7 @@ main(){
     echo "" >> $ConfigJenkinsFileName && logokay "Successfully added all plugins to the plugins install list for ${Name}" || { logerror "Failure adding all plugins to the plugins install list for ${Name}" && exiterror ; }
 
     #Config script is completed
-    echo "return null" >> $ConfigJenkinsFileName && echo "" >> $ConfigJenkinsFileName && logokay "Successfully completed config script for ${Name}" || { logerror "Failure completing config script for ${Name}" && exiterror ; }
+    echo "//No Output Unless Error" >> $ConfigJenkinsFileName && echo "return null" >> $ConfigJenkinsFileName && echo "" >> $ConfigJenkinsFileName && logokay "Successfully completed config script for ${Name}" || { logerror "Failure completing config script for ${Name}" && exiterror ; }
 
     #Remote execute the groovy script
     curl -s -b JenkinsSessionCookie -X POST http://localhost:8080/scriptText -H "Jenkins-Crumb: $(cat JenkinsLastCrumb)" --user admin:$InitialAdminPassword --data-urlencode "script=$( < ./$ConfigJenkinsFileName)" > JenkinsExecution && test $(cat JenkinsExecution | wc -c) -eq 0 && logokay "Successfully executed configure groovy script for ${Name}" || { logerror "Failure executing configure groovy script for ${Name}" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; }
