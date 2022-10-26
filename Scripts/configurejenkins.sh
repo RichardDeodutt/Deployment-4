@@ -40,8 +40,8 @@ JENKINS_PASSWORD=$(cat JENKINS_PASSWORD | sed 's/^/"/;s/$/"/')
 JENKINS_EMAIL=$( printf "%s %s\n" $(cat JENKINS_USERNAME) $(cat JENKINS_EMAIL | sed 's/^/</;s/$/>/') | sed 's/^/"/;s/$/"/')
 #Formatted IP
 JENKINS_IP=$(echo "http://$(cat JENKINS_IP)/" | sed 's/^/"/;s/$/"/')
-#Load the initial configuration for Jenkins
-LoadedInitialConfigJenkins=$(cat $ConfigJenkinsFileName)
+#Store the initial config for Jenkins here
+LoadedInitialConfigJenkins=""
 
 #The main function
 main(){
@@ -62,6 +62,9 @@ main(){
 
     #Get the Jenkins configure groovy script
     curl -s -X GET $ConfigJenkins -O && logokay "Successfully obtained configure groovy script for ${Name}" || { logerror "Failure obtaining configure groovy script for ${Name}" && exiterror ; }
+
+    #Load the initial configuration for Jenkins
+    LoadedInitialConfigJenkins=$(cat $ConfigJenkinsFileName)
 
     #Set the Username, Password, Email and IP for the configure groovy script placeholders
     echo $LoadedInitialConfigJenkins | sed "s/~JenkinsUsername~/$JENKINS_USERNAME/g" | sed "s/~JenkinsPassword~/$JENKINS_PASSWORD/g" | sed "s/~JenkinsEmail~/$JENKINS_EMAIL/g" | sed "s,~JenkinsIP~,$JENKINS_IP,g" > $ConfigJenkinsFileName && logokay "Successfully set configure groovy script for ${Name}" || { logerror "Failure setting configure groovy script for ${Name}" && exiterror ; }
