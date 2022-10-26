@@ -80,7 +80,7 @@ main(){
     done
 
     #Remote do a safe restart
-    curl -s -b JenkinsSessionCookie -X GET "http://localhost:8080/safeRestart " -H "Jenkins-Crumb: $(cat JenkinsLastCrumb)" --user $JENKINS_USERNAME:$JENKINS_PASSWORD > JenkinsExecution && test $(cat JenkinsExecution | wc -c) -eq 0 && logokay "Successfully executed safe restart for ${Name}" || { logerror "Failure executing safe restart for ${Name}" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; }
+    curl -s -b JenkinsSessionCookie -X GET "http://localhost:8080/safeRestart" -H "Jenkins-Crumb: $(cat JenkinsLastCrumb)" --user $JENKINS_USERNAME:$JENKINS_PASSWORD > JenkinsExecution && test $(cat JenkinsExecution | wc -c) -eq 0 && logokay "Successfully executed safe restart for ${Name}" || { logerror "Failure executing safe restart for ${Name}" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; }
 }
 
 #Log start
