@@ -44,6 +44,8 @@ jobs:
       run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runconfigurejenkins.sh && sudo chmod +x runconfigurejenkins.sh && sudo ./runconfigurejenkins.sh"
     - name: SSH Install Terraform
       run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstallterraform.sh && sudo chmod +x runinstallterraform.sh && sudo ./runinstallterraform.sh"
+    - name: SSH Safe Restart Jenkins
+      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runsaferestartjenkins.sh && sudo chmod +x runsaferestartjenkins.sh && sudo ./runsaferestartjenkins.sh"
     - name: SSH Status Check
       run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runstatuscheck.sh && sudo chmod +x runstatuscheck.sh && sudo ./runstatuscheck.sh"
     - name: SSH Remove Credentials and IP
