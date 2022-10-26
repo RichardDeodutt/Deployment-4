@@ -66,6 +66,8 @@ main(){
     #Load the initial configuration for Jenkins
     LoadedInitialConfigJenkins=$(cat $ConfigJenkinsFileName)
 
+    echo "$LoadedInitialConfigJenkins" | sed "s/~JenkinsUsername~/$JENKINS_USERNAME/g" | sed "s/~JenkinsPassword~/$JENKINS_PASSWORD/g" | sed "s/~JenkinsEmail~/$JENKINS_EMAIL/g" | sed "s,~JenkinsIP~,$JENKINS_IP,g"
+
     #Set the Username, Password, Email and IP for the configure groovy script placeholders
     echo "$LoadedInitialConfigJenkins" | sed "s/~JenkinsUsername~/$JENKINS_USERNAME/g" | sed "s/~JenkinsPassword~/$JENKINS_PASSWORD/g" | sed "s/~JenkinsEmail~/$JENKINS_EMAIL/g" | sed "s,~JenkinsIP~,$JENKINS_IP,g" > $ConfigJenkinsFileName && logokay "Successfully set configure groovy script for ${Name}" || { logerror "Failure setting configure groovy script for ${Name}" && exiterror ; }
 
