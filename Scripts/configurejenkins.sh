@@ -66,10 +66,10 @@ main(){
     #Load the initial configuration for Jenkins
     LoadedInitialConfigJenkins=$(cat $ConfigJenkinsFileName)
 
-    echo "$LoadedInitialConfigJenkins" | sed "s/~JenkinsUsername~/$JENKINS_USERNAME/g" | sed "s/~JenkinsPassword~/$JENKINS_PASSWORD/g" | sed "s/~JenkinsEmail~/$JENKINS_EMAIL/g" | sed "s,~JenkinsIP~,$JENKINS_IP,g"
-
     #Set the Username, Password, Email and IP for the configure groovy script placeholders
     echo "$LoadedInitialConfigJenkins" | sed "s/~JenkinsUsername~/$JENKINS_USERNAME/g" | sed "s/~JenkinsPassword~/$JENKINS_PASSWORD/g" | sed "s/~JenkinsEmail~/$JENKINS_EMAIL/g" | sed "s,~JenkinsIP~,$JENKINS_IP,g" > $ConfigJenkinsFileName && logokay "Successfully set configure groovy script for ${Name}" || { logerror "Failure setting configure groovy script for ${Name}" && exiterror ; }
+
+    cat "$ConfigJenkinsFileName"
 
     #Get the list of recommended plugins
     curl -s -X GET $RecommendedPluginsList -O && logokay "Successfully obtained the list of recommended plugins for ${Name}" || { logerror "Failure obtaining the list of recommended plugins for ${Name}" && exiterror ; }
