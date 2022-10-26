@@ -31,7 +31,7 @@ PendingJobs="Some Jobs"
 StartEpoch="Unset"
 
 #Retry or sleep delay in seconds
-Retry=5
+Retry=15
 
 #Timeout in seconds, 10 minutes
 Timeout=600
@@ -56,19 +56,18 @@ main(){
     #Set the start time of waiting
     StartEpoch=$(date +%s)
 
+    logokay "Checking jobs for ${Name}"
+
     #Wait until all jobs are completed
     while [ -n "$PendingJobs" ]; do
 
     sleep $Retry
 
     #Remote check the updateCenter jobs, refresh jobs and store to file
-    curl -s -g -b JenkinsSessionCookie -X GET "http://localhost:8080/updateCenter/api/json?tree=jobs[*]" -H "Jenkins-Crumb: $(cat JenkinsLastCrumb)" --user $JENKINS_USERNAME:$JENKINS_PASSWORD | jq -r '. | .jobs | .[].status._class? // empty' | sed 's/hudson.model.UpdateCenter$DownloadJob$SuccessButRequiresRestart//g' | sed 's/hudson.model.UpdateCenter$DownloadJob$Success//g' | sed '/^$/d' > JenkinsExecution && logokay "Successfully checked jobs for ${Name}" || { logerror "Failure checking jobs for ${Name}" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; }
+    curl -s -g -b JenkinsSessionCookie -X GET "http://localhost:8080/updateCenter/api/json?tree=jobs[*]" -H "Jenkins-Crumb: $(cat JenkinsLastCrumb)" --user $JENKINS_USERNAME:$JENKINS_PASSWORD | jq -r '. | .jobs | .[].status._class? // empty' | sed 's/hudson.model.UpdateCenter$DownloadJob$SuccessButRequiresRestart//g' | sed 's/hudson.model.UpdateCenter$DownloadJob$Success//g' | sed '/^$/d' > JenkinsExecution && logokay "Successfully checked jobs for ${Name}, $(cat JenkinsExecution | wc -l) jobs left)" || { logerror "Failure checking jobs for ${Name}" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; }
 
     #Store the pending jobs as a variable and refresh it
     PendingJobs=$(cat JenkinsExecution)
-
-    #Tell the user how many jobs are left
-    logerror "$(echo "$PendingJobs" | wc -l) Jobs Left"
 
     #Check if we timed out
     if [ $(date +%s) -ge $(echo "$StartEpoch + $Timeout" | bc) ]; then
