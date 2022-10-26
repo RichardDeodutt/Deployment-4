@@ -86,7 +86,7 @@ main(){
     done
 
     #Remote do a safe restart
-    java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD && logokay "Successfully executed safe restart for ${Name}" || { logerror "Failure executing safe restart for ${Name}" && exiterror ; }
+    java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD safe-restart && logokay "Successfully executed safe restart for ${Name}" || { logerror "Failure executing safe restart for ${Name}" && exiterror ; }
 }
 
 #Log start
