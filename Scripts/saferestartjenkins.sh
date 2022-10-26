@@ -30,6 +30,9 @@ PendingJobs="Some Jobs"
 #Start Time of waitinf or plugins to install
 StartEpoch="Unset"
 
+#Retry or sleep delay in seconds
+Retry=5
+
 #Timeout in seconds, 10 minutes
 Timeout=600
 
@@ -54,7 +57,9 @@ main(){
     StartEpoch=$(date +%s)
 
     #Wait until all jobs are completed
-    while [ -z "$PendingJobs" ]; do
+    while [ -n "$PendingJobs" ]; do
+
+    sleep $Retry
 
     #Remote check the updateCenter jobs, refresh jobs and store to file
     curl -s -g -b JenkinsSessionCookie -X GET "http://localhost:8080/updateCenter/api/json?tree=jobs[*]" -H "Jenkins-Crumb: $(cat JenkinsLastCrumb)" --user $JENKINS_USERNAME:$JENKINS_PASSWORD | jq -r '. | .jobs | .[].status._class? // empty' | sed 's/hudson.model.UpdateCenter$DownloadJob$SuccessButRequiresRestart//g' | sed 's/hudson.model.UpdateCenter$DownloadJob$Success//g' | sed '/^$/d' > JenkinsExecution && logokay "Successfully checked jobs for ${Name}" || { logerror "Failure checking jobs for ${Name}" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; }
@@ -76,7 +81,7 @@ main(){
     done
 
     #Remote do a safe restart
-    curl -s -g -b JenkinsSessionCookie -X GET "http://localhost:8080/safeRestart " -H "Jenkins-Crumb: $(cat JenkinsLastCrumb)" --user $JENKINS_USERNAME:$JENKINS_PASSWORD > JenkinsExecution && test $(cat JenkinsExecution | wc -c) -eq 0 && logokay "Successfully executed safe restart for ${Name}" || { logerror "Failure executing safe restart for ${Name}" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; }
+    curl -s -b JenkinsSessionCookie -X GET "http://localhost:8080/safeRestart " -H "Jenkins-Crumb: $(cat JenkinsLastCrumb)" --user $JENKINS_USERNAME:$JENKINS_PASSWORD > JenkinsExecution && test $(cat JenkinsExecution | wc -c) -eq 0 && logokay "Successfully executed safe restart for ${Name}" || { logerror "Failure executing safe restart for ${Name}" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; }
 }
 
 #Log start
