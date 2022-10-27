@@ -19,7 +19,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: .
+        working-directory: ./Terraform/Jenkins
     steps: 
     - uses: actions/checkout@v3
       name: GitHub Checkout
