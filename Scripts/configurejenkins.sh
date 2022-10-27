@@ -33,13 +33,13 @@ InitialAdminPasswordLocation="/var/lib/jenkins/secrets/initialAdminPassword"
 #Jenkins Original Password
 InitialAdminPassword=$(cat $InitialAdminPasswordLocation)
 #Formatted Username
-JENKINS_USERNAME=$(cat JENKINS_USERNAME | sed 's/^/"/;s/$/"/')
+F_JENKINS_USERNAME=$(cat JENKINS_USERNAME | sed 's/^/"/;s/$/"/')
 #Formatted Password
-JENKINS_PASSWORD=$(cat JENKINS_PASSWORD | sed 's/^/"/;s/$/"/')
+F_JENKINS_PASSWORD=$(cat JENKINS_PASSWORD | sed 's/^/"/;s/$/"/')
 #Formatted Email
-JENKINS_EMAIL=$( printf "%s %s\n" $(cat JENKINS_USERNAME) $(cat JENKINS_EMAIL | sed 's/^/</;s/$/>/') | sed 's/^/"/;s/$/"/')
+F_JENKINS_EMAIL=$( printf "%s %s\n" $(cat JENKINS_USERNAME) $(cat JENKINS_EMAIL | sed 's/^/</;s/$/>/') | sed 's/^/"/;s/$/"/')
 #Formatted IP
-JENKINS_IP=$(echo "http://$(cat JENKINS_IP)/" | sed 's/^/"/;s/$/"/')
+F_JENKINS_IP=$(echo "http://$(cat JENKINS_IP)/" | sed 's/^/"/;s/$/"/')
 #Store the initial config for Jenkins here
 LoadedInitialConfigJenkins=""
 
@@ -67,7 +67,7 @@ main(){
     LoadedInitialConfigJenkins=$(cat $ConfigJenkinsFileName)
 
     #Set the Username, Password, Email and IP for the configure groovy script placeholders
-    echo "$LoadedInitialConfigJenkins" | sed "s/~JenkinsUsername~/$JENKINS_USERNAME/g" | sed "s/~JenkinsPassword~/$JENKINS_PASSWORD/g" | sed "s/~JenkinsEmail~/$JENKINS_EMAIL/g" | sed "s,~JenkinsIP~,$JENKINS_IP,g" > $ConfigJenkinsFileName && logokay "Successfully set configure groovy script for ${Name}" || { logerror "Failure setting configure groovy script for ${Name}" && exiterror ; }
+    echo "$LoadedInitialConfigJenkins" | sed "s/~JenkinsUsername~/$F_JENKINS_USERNAME/g" | sed "s/~JenkinsPassword~/$F_JENKINS_PASSWORD/g" | sed "s/~JenkinsEmail~/$F_JENKINS_EMAIL/g" | sed "s,~JenkinsIP~,$F_JENKINS_IP,g" > $ConfigJenkinsFileName && logokay "Successfully set configure groovy script for ${Name}" || { logerror "Failure setting configure groovy script for ${Name}" && exiterror ; }
 
     #Get the list of recommended plugins
     curl -s -X GET $RecommendedPluginsList -O && logokay "Successfully obtained the list of recommended plugins for ${Name}" || { logerror "Failure obtaining the list of recommended plugins for ${Name}" && exiterror ; }

@@ -25,10 +25,10 @@ ConfigSecretJenkins="https://raw.githubusercontent.com/RichardDeodutt/Deployment
 #The filename of the secret configuration file for Jenkins
 ConfigSecretJenkinsFileName="credential-secret-jenkins-default.xml"
 
-#Formatted Username
-JENKINS_USERNAME=$(cat JENKINS_USERNAME | sed 's/^/"/;s/$/"/')
-#Formatted Password
-JENKINS_PASSWORD=$(cat JENKINS_PASSWORD | sed 's/^/"/;s/$/"/')
+#Username
+JENKINS_USERNAME=$(cat JENKINS_USERNAME)
+#Password
+JENKINS_PASSWORD=$(cat JENKINS_PASSWORD)
 
 #Formatted AWS_ACCESS_KEY_ID
 AWS_ACCESS_KEY_ID=$(cat AWS_ACCESS_KEY_ID | sed 's/^/"/;s/$/"/')
