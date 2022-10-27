@@ -1,4 +1,4 @@
-name: Redeploy Jenkins
+name: Post Config Jenkins
 
 on: 
   workflow_dispatch: 
@@ -14,13 +14,13 @@ env:
   JENKINS_EMAIL: ${{ secrets.JENKINS_EMAIL }}
 
 jobs: 
-  redeploy-jenkins: 
-    name: Redeploy Jenkins using Terraform
+  post-config-jenkins: 
+    name: Post Configure Jenkins
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
-        working-directory: ./Terraform/Jenkins
+        working-directory: .
     steps: 
     - uses: actions/checkout@v3
       name: GitHub Checkout
@@ -30,8 +30,6 @@ jobs:
       run: terraform init
     - name: Terraform Validate
       run: terraform validate
-    - name: Terraform Destroy
-      run: terraform destroy --auto-approve
     - name: Terraform Apply
       run: terraform apply --auto-approve
     - name: Terraform Output
@@ -44,8 +42,6 @@ jobs:
       run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runconfigurejenkins.sh && sudo chmod +x runconfigurejenkins.sh && sudo ./runconfigurejenkins.sh"
     - name: SSH Install Terraform
       run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstallterraform.sh && sudo chmod +x runinstallterraform.sh && sudo ./runinstallterraform.sh"
-    - name: SSH System Upgrade
-      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runsystemupgrade.sh && sudo chmod +x runsystemupgrade.sh && sudo ./runsystemupgrade.sh"
     - name: SSH Safe Restart Jenkins
       run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runsaferestartjenkins.sh && sudo chmod +x runsaferestartjenkins.sh && sudo ./runsaferestartjenkins.sh"
     - name: SSH Status Check

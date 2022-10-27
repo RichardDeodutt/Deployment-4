@@ -21,6 +21,8 @@ setlogs
 
 #The main function
 main(){
+    #Update local apt repo database
+    aptupdatelog
     #Install Screenfetch if not already
     aptinstalllog "screenfetch"
     #Log Java Status
