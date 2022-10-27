@@ -20,7 +20,7 @@ LogFileName="PostConfigureJenkins.log"
 setlogs
 
 #The configuration for Jenkins secret
-ConfigSecretJenkins="https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Configs/credential-secret-jenkins-default"
+ConfigSecretJenkins="https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Configs/credential-secret-jenkins-default.xml"
 
 #The filename of the secret configuration file for Jenkins
 ConfigSecretJenkinsFileName="credential-secret-jenkins-default.xml"
