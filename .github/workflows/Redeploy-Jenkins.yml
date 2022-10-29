@@ -44,6 +44,8 @@ jobs:
       run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runconfigurejenkins.sh && sudo chmod +x runconfigurejenkins.sh && sudo ./runconfigurejenkins.sh"
     - name: SSH Install Terraform
       run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstallterraform.sh && sudo chmod +x runinstallterraform.sh && sudo ./runinstallterraform.sh"
+    - name: SSH Install Agent
+      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runinstallagent.sh && sudo chmod +x runinstallagent.sh && sudo ./runinstallagent.sh"
     - name: SSH System Upgrade
       run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runsystemupgrade.sh && sudo chmod +x runsystemupgrade.sh && sudo ./runsystemupgrade.sh"
     - name: SSH Safe Restart Jenkins
