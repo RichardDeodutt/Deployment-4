@@ -77,7 +77,7 @@ main(){
     echo "$LoadedInitialConfigJenkins" | sed "s/~Id~/$Id_AWS_ACCESS_KEY_ID/g" | sed "s/~Description~/$Description_AWS_ACCESS_KEY_ID/g" | sed "s/~Secret~/$AWS_ACCESS_KEY_ID/g" > $ConfigSecretJenkinsFileName && logokay "Successfully set secret configure file for ${Name} AWS_ACCESS_KEY_ID" || { logerror "Failure setting secret configure file for ${Name} AWS_ACCESS_KEY_ID" && exiterror ; }
 
     #Remote send the secret config AWS_ACCESS_KEY_ID
-    java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD create-credentials-by-xml system::system::jenkins _ < $ConfigSecretJenkinsFileName && logokay "Successfully executed send secret config for ${Name} AWS_ACCESS_KEY_ID" || { test $? - eq 1 && logwarning "Secret config for ${Name} AWS_ACCESS_KEY_ID already exists nothing changed" || { logerror "Failure executing send secret config for ${Name} AWS_ACCESS_KEY_ID" && exiterror ; } ; }
+    java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD create-credentials-by-xml system::system::jenkins _ < $ConfigSecretJenkinsFileName && logokay "Successfully executed send secret config for ${Name} AWS_ACCESS_KEY_ID" || { test $? -eq 1 && logwarning "Secret config for ${Name} AWS_ACCESS_KEY_ID already exists nothing changed" || { logerror "Failure executing send secret config for ${Name} AWS_ACCESS_KEY_ID" && exiterror ; } ; }
 
     #Get the Jenkins secret configure file
     curl -s -X GET $ConfigSecretJenkins -O && logokay "Successfully obtained secret configure file for ${Name}" || { logerror "Failure obtaining secret configure file for ${Name}" && exiterror ; }
@@ -89,7 +89,7 @@ main(){
     echo "$LoadedInitialConfigJenkins" | sed "s/~Id~/$Id_AWS_SECRET_ACCESS_KEY/g" | sed "s/~Description~/$Description_AWS_SECRET_ACCESS_KEY/g" | sed "s/~Secret~/$AWS_SECRET_ACCESS_KEY/g" > $ConfigSecretJenkinsFileName && logokay "Successfully set secret configure file for ${Name} AWS_SECRET_ACCESS_KEY" || { logerror "Failure setting secret configure file for ${Name} AWS_SECRET_ACCESS_KEY" && exiterror ; }
 
     #Remote send the secret config AWS_SECRET_ACCESS_KEY
-    java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD create-credentials-by-xml system::system::jenkins _ < $ConfigSecretJenkinsFileName && logokay "Successfully executed send secret config for ${Name} AWS_SECRET_ACCESS_KEY" || { test $? - eq 1 && logwarning "Secret config for ${Name} AWS_SECRET_ACCESS_KEY already exists nothing changed" || { logerror "Failure executing send secret config for ${Name} AWS_SECRET_ACCESS_KEY" && exiterror ; } ; }
+    java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD create-credentials-by-xml system::system::jenkins _ < $ConfigSecretJenkinsFileName && logokay "Successfully executed send secret config for ${Name} AWS_SECRET_ACCESS_KEY" || { test $? -eq 1 && logwarning "Secret config for ${Name} AWS_SECRET_ACCESS_KEY already exists nothing changed" || { logerror "Failure executing send secret config for ${Name} AWS_SECRET_ACCESS_KEY" && exiterror ; } ; }
 
     #Remove secret configure file
     rm $ConfigSecretJenkinsFileName && logokay "Successfully removed secret configure file for ${Name}" || { logerror "Failure removing secret configure file for ${Name}" && exiterror ; }
