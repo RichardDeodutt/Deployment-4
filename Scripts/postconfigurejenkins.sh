@@ -146,7 +146,7 @@ main(){
     LoadedInitialConfigJenkins=$(cat $ConfigJobJenkinsFileName) && logokay "Successfully loaded job configure file for ${Name}" || { logerror "Failure loading job configure file for ${Name}" && exiterror ; }
 
     #Set the RepoOwner, RepoName and RepoURL for the job configure file placeholders
-    echo "$LoadedInitialConfigJenkins" | sed "s/~RepoOwner~/$JENKINS_GITHUB_REPO_OWNER/g" | sed "s/~RepoName~/$JENKINS_GITHUB_REPO_NAME/g" | sed "s/~RepoURL~/$JENKINS_GITHUB_REPO_URL/g" > $ConfigJobJenkinsFileName && logokay "Successfully set job configure file for ${Name}" || { logerror "Failure setting job configure file for ${Name}" && exiterror ; }
+    echo "$LoadedInitialConfigJenkins" | sed "s,~RepoOwner~,$JENKINS_GITHUB_REPO_OWNER,g" | sed "s,~RepoName~,$JENKINS_GITHUB_REPO_NAME,g" | sed "s,~RepoURL~,$JENKINS_GITHUB_REPO_URL,g" > $ConfigJobJenkinsFileName && logokay "Successfully set job configure file for ${Name}" || { logerror "Failure setting job configure file for ${Name}" && exiterror ; }
 
     #Remote send the job config
     java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD create-job $JENKINS_JOB_NAME < $ConfigJobJenkinsFileName > JenkinsExecution 2>&1 && logokay "Successfully executed send job config for ${Name}" || { test $? -eq 1 && logwarning "Job config for ${Name} already exists nothing changed" || { logerror "Failure executing send job config for ${Name}" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; } ; }
