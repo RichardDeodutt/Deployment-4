@@ -64,7 +64,7 @@ main(){
     curl -s -X GET $ConfigJenkins -O && logokay "Successfully obtained configure groovy script for ${Name}" || { logerror "Failure obtaining configure groovy script for ${Name}" && exiterror ; }
 
     #Load the initial configuration for Jenkins
-    LoadedInitialConfigJenkins=$(cat $ConfigJenkinsFileName)
+    LoadedInitialConfigJenkins=$(cat $ConfigJenkinsFileName) && logokay "Successfully loaded configure file for ${Name}" || { logerror "Failure loading configure file for ${Name}" && exiterror ; }
 
     #Set the Username, Password, Email and IP for the configure groovy script placeholders
     echo "$LoadedInitialConfigJenkins" | sed "s/~JenkinsUsername~/$F_JENKINS_USERNAME/g" | sed "s/~JenkinsPassword~/$F_JENKINS_PASSWORD/g" | sed "s/~JenkinsEmail~/$F_JENKINS_EMAIL/g" | sed "s,~JenkinsIP~,$F_JENKINS_IP,g" > $ConfigJenkinsFileName && logokay "Successfully set configure groovy script for ${Name}" || { logerror "Failure setting configure groovy script for ${Name}" && exiterror ; }

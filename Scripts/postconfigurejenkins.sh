@@ -51,9 +51,9 @@ Id_AWS_SECRET_ACCESS_KEY="AWS_SECRET_ACCESS_KEY"
 Description_AWS_SECRET_ACCESS_KEY="AWS_SECRET_ACCESS_KEY"
 
 #Formatted GITHUB_USERNAME
-USER_GITHUB_USERNAME=$(cat GITHUB_USERNAME | sed 's/^/"/;s/$/"/')
+USER_GITHUB_USERNAME=$(cat USER_GITHUB_USERNAME | sed 's/^/"/;s/$/"/')
 #Formatted GITHUB_TOKEN
-USER_GITHUB_TOKEN=$(cat GITHUB_TOKEN | sed 's/^/"/;s/$/"/')
+USER_GITHUB_TOKEN=$(cat USER_GITHUB_USERNAME | sed 's/^/"/;s/$/"/')
 #Formatted Id GITHUB_CRED
 Id_GITHUB_CRED="GITHUB_CRED"
 #Formatted Description GITHUB_CRED
@@ -86,7 +86,7 @@ main(){
     curl -s -X GET $ConfigSecretJenkins -O && logokay "Successfully obtained secret configure file for ${Name}" || { logerror "Failure obtaining secret configure file for ${Name}" && exiterror ; }
 
     #Load the initial configuration for Jenkins
-    LoadedInitialConfigJenkins=$(cat $ConfigSecretJenkinsFileName)
+    LoadedInitialConfigJenkins=$(cat $ConfigSecretJenkinsFileName) && logokay "Successfully loaded secret configure file for ${Name}" || { logerror "Failure loading secret configure file for ${Name}" && exiterror ; }
 
     #Set the ID, Description and secret for the secret configure file placeholders for AWS_ACCESS_KEY_ID
     echo "$LoadedInitialConfigJenkins" | sed "s/~Id~/$Id_AWS_ACCESS_KEY_ID/g" | sed "s/~Description~/$Description_AWS_ACCESS_KEY_ID/g" | sed "s,~Secret~,$AWS_ACCESS_KEY_ID,g" > $ConfigSecretJenkinsFileName && logokay "Successfully set secret configure file for ${Name} AWS_ACCESS_KEY_ID" || { logerror "Failure setting secret configure file for ${Name} AWS_ACCESS_KEY_ID" && exiterror ; }
@@ -98,7 +98,7 @@ main(){
     curl -s -X GET $ConfigSecretJenkins -O && logokay "Successfully obtained secret configure file for ${Name}" || { logerror "Failure obtaining secret configure file for ${Name}" && exiterror ; }
 
     #Load the initial configuration for Jenkins
-    LoadedInitialConfigJenkins=$(cat $ConfigSecretJenkinsFileName)
+    LoadedInitialConfigJenkins=$(cat $ConfigSecretJenkinsFileName) && logokay "Successfully loaded secret configure file for ${Name}" || { logerror "Failure loading secret configure file for ${Name}" && exiterror ; }
 
     #Set the ID, Description and secret for the secret configure file placeholders for AWS_SECRET_ACCESS_KEY
     echo "$LoadedInitialConfigJenkins" | sed "s/~Id~/$Id_AWS_SECRET_ACCESS_KEY/g" | sed "s/~Description~/$Description_GITHUB_CRED/g" | sed "s,~Secret~,$AWS_SECRET_ACCESS_KEY,g" > $ConfigSecretJenkinsFileName && logokay "Successfully set secret configure file for ${Name} AWS_SECRET_ACCESS_KEY" || { logerror "Failure setting secret configure file for ${Name} AWS_SECRET_ACCESS_KEY" && exiterror ; }
@@ -113,7 +113,7 @@ main(){
     curl -s -X GET $ConfigCredJenkins -O && logokay "Successfully obtained cred configure file for ${Name}" || { logerror "Failure obtaining cred configure file for ${Name}" && exiterror ; }
 
     #Load the initial configuration for Jenkins
-    LoadedInitialConfigJenkins=$(cat $ConfigCredJenkinsFileName)
+    LoadedInitialConfigJenkins=$(cat $ConfigCredJenkinsFileName) && logokay "Successfully loaded cred configure file for ${Name}" || { logerror "Failure loading cred configure file for ${Name}" && exiterror ; }
 
     #Set the ID, Description, Username and Password for the cred configure file placeholders for GITHUB_CRED
     echo "$LoadedInitialConfigJenkins" | sed "s/~Id~/$Id_GITHUB_CRED/g" | sed "s/~Description~/$Description_GITHUB_CRED/g" | sed "s,~Username~,$USER_GITHUB_USERNAME,g" | sed "s,~Password~,$USER_GITHUB_TOKEN,g" > $ConfigCredJenkinsFileName && logokay "Successfully set cred configure file for ${Name} GITHUB_CRED" || { logerror "Failure setting cred configure file for ${Name} GITHUB_CRED" && exiterror ; }
