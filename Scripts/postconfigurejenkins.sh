@@ -29,7 +29,7 @@ ConfigCredJenkins="https://raw.githubusercontent.com/RichardDeodutt/Deployment-4
 ConfigSecretJenkinsFileName="credential-secret-jenkins-default.xml"
 
 #The filename of the cred configuration file for Jenkins
-ConfigCredJenkinsFileName="credential-cred-jenkins-default"
+ConfigCredJenkinsFileName="credential-cred-jenkins-default.xml"
 
 #Username
 JENKINS_USERNAME=$(cat JENKINS_USERNAME)
