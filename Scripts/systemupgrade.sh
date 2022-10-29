@@ -25,7 +25,7 @@ main(){
     aptupdatelog
 
     #Upgrade the system
-    apt-get upgrade > /dev/null 2>&1 && logokay "Successfully finished ${Name}" || { logerror "Failure finishing ${Name}" && exiterror ; }
+    DEBIAN_FRONTEND=noninteractive apt-get upgrade -y > /dev/null 2>&1 && logokay "Successfully finished ${Name}" || { logerror "Failure finishing ${Name}" && exiterror ; }
 
     #Remove unneeded packages
     apt-get autoremove > /dev/null 2>&1 && logokay "Successfully cleaned up the ${Name}" || { logerror "Failure cleaning up the ${Name}" && exiterror ; }
