@@ -25,11 +25,17 @@ ConfigSecretJenkins="https://raw.githubusercontent.com/RichardDeodutt/Deployment
 #The configuration for Jenkins cred
 ConfigCredJenkins="https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Configs/credential-cred-jenkins-default.xml"
 
+#The configuration for Jenkins job
+ConfigJobJenkins="https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Configs/job-build-jenkins-default.xml"
+
 #The filename of the secret configuration file for Jenkins
 ConfigSecretJenkinsFileName="credential-secret-jenkins-default.xml"
 
 #The filename of the cred configuration file for Jenkins
 ConfigCredJenkinsFileName="credential-cred-jenkins-default.xml"
+
+#The filename of the job configuration file for Jenkins
+ConfigJobJenkinsFileName="job-build-jenkins-default.xml"
 
 #Username
 JENKINS_USERNAME=$(cat JENKINS_USERNAME)
@@ -38,26 +44,35 @@ JENKINS_PASSWORD=$(cat JENKINS_PASSWORD)
 
 #Formatted AWS_ACCESS_KEY_ID
 AWS_ACCESS_KEY_ID=$(cat AWS_ACCESS_KEY_ID | sed 's/^/"/;s/$/"/')
-#Formatted Id AWS_ACCESS_KEY_ID
+#Id AWS_ACCESS_KEY_ID
 Id_AWS_ACCESS_KEY_ID="AWS_ACCESS_KEY_ID"
-#Formatted Description AWS_ACCESS_KEY_ID
+#Description AWS_ACCESS_KEY_ID
 Description_AWS_ACCESS_KEY_ID="AWS_ACCESS_KEY_ID"
 
 #Formatted AWS_SECRET_ACCESS_KEY
 AWS_SECRET_ACCESS_KEY=$(cat AWS_SECRET_ACCESS_KEY | sed 's/^/"/;s/$/"/')
-#Formatted Id AWS_SECRET_ACCESS_KEY
+#Id AWS_SECRET_ACCESS_KEY
 Id_AWS_SECRET_ACCESS_KEY="AWS_SECRET_ACCESS_KEY"
-#Formatted Description AWS_SECRET_ACCESS_KEY
+#Description AWS_SECRET_ACCESS_KEY
 Description_AWS_SECRET_ACCESS_KEY="AWS_SECRET_ACCESS_KEY"
 
 #Formatted GITHUB_USERNAME
 USER_GITHUB_USERNAME=$(cat USER_GITHUB_USERNAME | sed 's/^/"/;s/$/"/')
 #Formatted GITHUB_TOKEN
 USER_GITHUB_TOKEN=$(cat USER_GITHUB_USERNAME | sed 's/^/"/;s/$/"/')
-#Formatted Id GITHUB_CRED
+#Id GITHUB_CRED
 Id_GITHUB_CRED="GITHUB_CRED"
-#Formatted Description GITHUB_CRED
+#Description GITHUB_CRED
 Description_GITHUB_CRED="GITHUB_CRED"
+
+#JENKINS_JOB_NAME
+JENKINS_JOB_NAME=$(cat JENKINS_JOB_NAME)
+#JENKINS_GITHUB_REPO_URL
+JENKINS_GITHUB_REPO_URL=$(cat JENKINS_GITHUB_REPO_URL)
+#JENKINS_GITHUB_REPO_OWNER
+JENKINS_GITHUB_REPO_OWNER=$(echo $JENKINS_GITHUB_REPO_URL | cut -d "/" -f4)
+#JENKINS_GITHUB_REPO_NAME
+JENKINS_GITHUB_REPO_NAME=$(echo $JENKINS_GITHUB_REPO_URL | cut -d "/" -f5 | sed 's/.git//')
 
 #Store the initial secret config for Jenkins here
 LoadedInitialConfigJenkins=""
@@ -123,6 +138,21 @@ main(){
 
     #Remove cred configure file
     rm $ConfigCredJenkinsFileName && logokay "Successfully removed cred configure file for ${Name}" || { logerror "Failure removing cred configure file for ${Name}" && exiterror ; }
+
+    #Get the Jenkins job configure file
+    curl -s -X GET $ConfigJobJenkins -O && logokay "Successfully obtained job configure file for ${Name}" || { logerror "Failure obtaining job configure file for ${Name}" && exiterror ; }
+
+    #Load the initial configuration for Jenkins
+    LoadedInitialConfigJenkins=$(cat $ConfigJobJenkinsFileName) && logokay "Successfully loaded job configure file for ${Name}" || { logerror "Failure loading job configure file for ${Name}" && exiterror ; }
+
+    #Set the RepoOwner, RepoName and RepoURL for the job configure file placeholders
+    echo "$LoadedInitialConfigJenkins" | sed "s/~RepoOwner~/$JENKINS_GITHUB_REPO_OWNER/g" | sed "s/~RepoName~/$JENKINS_GITHUB_REPO_NAME/g" | sed "s/~RepoURL~/$JENKINS_GITHUB_REPO_URL/g" > $ConfigJobJenkinsFileName && logokay "Successfully set job configure file for ${Name}" || { logerror "Failure setting job configure file for ${Name}" && exiterror ; }
+
+    #Remote send the job config
+    java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD create-job $JENKINS_JOB_NAME < $ConfigJobJenkinsFileName > JenkinsExecution 2>&1 && logokay "Successfully executed send job config for ${Name}" || { test $? -eq 1 && logwarning "Job config for ${Name} already exists nothing changed" || { logerror "Failure executing send job config for ${Name}" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; } ; }
+
+    #Remove job configure file
+    rm $ConfigJobJenkinsFileName && logokay "Successfully removed job configure file for ${Name}" || { logerror "Failure removing job configure file for ${Name}" && exiterror ; }
 }
 
 #Log start

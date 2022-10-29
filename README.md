@@ -22,3 +22,11 @@ Set up a CI/CD pipeline from start to finish using a Jenkins server and deployin
 - JENKINS_PASSWORD
 
 - JENKINS_EMAIL
+
+- USER_GITHUB_USERNAME
+
+- USER_GITHUB_TOKEN
+
+- JENKINS_JOB_NAME
+
+- JENKINS_GITHUB_REPO_URL
