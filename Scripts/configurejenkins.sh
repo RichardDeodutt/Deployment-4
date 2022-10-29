@@ -91,7 +91,7 @@ main(){
     echo "//No Output Unless Error" >> $ConfigJenkinsFileName && echo "return null" >> $ConfigJenkinsFileName && echo "" >> $ConfigJenkinsFileName && logokay "Successfully completed config script for ${Name}" || { logerror "Failure completing config script for ${Name}" && exiterror ; }
 
     #Remote execute the groovy script
-    curl -s -b JenkinsSessionCookie -X POST "http://localhost:8080/scriptText" -H "Jenkins-Crumb: $(cat JenkinsLastCrumb)" --user admin:$InitialAdminPassword --data-urlencode "script=$( < ./$ConfigJenkinsFileName)" > JenkinsExecution && test $(cat JenkinsExecution | wc -c) -eq 0 && logokay "Successfully executed configure groovy script for ${Name}" || { logerror "Failure executing configure groovy script for ${Name}" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; }
+    curl -s -b JenkinsSessionCookie -X POST "http://localhost:8080/scriptText" -H "Jenkins-Crumb: $(cat JenkinsLastCrumb)" --user admin:$InitialAdminPassword --data-urlencode "script=$( < ./$ConfigJenkinsFileName)" > JenkinsExecution 2>&1 && test $(cat JenkinsExecution | wc -c) -eq 0 && logokay "Successfully executed configure groovy script for ${Name}" || { logerror "Failure executing configure groovy script for ${Name}" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; }
 
     #Remove configure groovy script
     rm $ConfigJenkinsFileName && logokay "Successfully removed configure groovy script for ${Name}" || { logerror "Failure removing configure groovy script for ${Name}" && exiterror ; }
