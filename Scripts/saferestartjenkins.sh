@@ -48,7 +48,7 @@ main(){
     aptinstalllog "jq"
 
     #Install curl if not already
-    aptinstalllog "curl"waiting
+    aptinstalllog "curl"
 
     #Download jenkins-cli.ja if not already
     ls $JCJ > /dev/null 2>&1 && logokay "Successfully found $JCJ for ${Name}" || { curl -s "http://localhost:8080/jnlpJars/jenkins-cli.jar" -O -J && ls $JCJ > /dev/null 2>&1 && logokay "Successfully downloaded $JCJ for ${Name}" || { logerror "Failure obtaining $JCJ for ${Name}" && exiterror ; } ; }

@@ -22,8 +22,14 @@ setlogs
 #The configuration for Jenkins secret
 ConfigSecretJenkins="https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Configs/credential-secret-jenkins-default.xml"
 
+#The configuration for Jenkins cred
+ConfigCredJenkins="https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Configs/credential-cred-jenkins-default.xml"
+
 #The filename of the secret configuration file for Jenkins
 ConfigSecretJenkinsFileName="credential-secret-jenkins-default.xml"
+
+#The filename of the cred configuration file for Jenkins
+ConfigCredJenkinsFileName="credential-cred-jenkins-default"
 
 #Username
 JENKINS_USERNAME=$(cat JENKINS_USERNAME)
@@ -43,6 +49,15 @@ AWS_SECRET_ACCESS_KEY=$(cat AWS_SECRET_ACCESS_KEY | sed 's/^/"/;s/$/"/')
 Id_AWS_SECRET_ACCESS_KEY="AWS_SECRET_ACCESS_KEY"
 #Formatted Description AWS_SECRET_ACCESS_KEY
 Description_AWS_SECRET_ACCESS_KEY="AWS_SECRET_ACCESS_KEY"
+
+#Formatted GITHUB_USERNAME
+USER_GITHUB_USERNAME=$(cat GITHUB_USERNAME | sed 's/^/"/;s/$/"/')
+#Formatted GITHUB_TOKEN
+USER_GITHUB_TOKEN=$(cat GITHUB_TOKEN | sed 's/^/"/;s/$/"/')
+#Formatted Id GITHUB_CRED
+Id_GITHUB_CRED="GITHUB_CRED"
+#Formatted Description GITHUB_CRED
+Description_GITHUB_CRED="GITHUB_CRED"
 
 #Store the initial secret config for Jenkins here
 LoadedInitialConfigJenkins=""
@@ -86,13 +101,28 @@ main(){
     LoadedInitialConfigJenkins=$(cat $ConfigSecretJenkinsFileName)
 
     #Set the ID, Description and secret for the secret configure file placeholders for AWS_SECRET_ACCESS_KEY
-    echo "$LoadedInitialConfigJenkins" | sed "s/~Id~/$Id_AWS_SECRET_ACCESS_KEY/g" | sed "s/~Description~/$Description_AWS_SECRET_ACCESS_KEY/g" | sed "s,~Secret~,$AWS_SECRET_ACCESS_KEY,g" > $ConfigSecretJenkinsFileName && logokay "Successfully set secret configure file for ${Name} AWS_SECRET_ACCESS_KEY" || { logerror "Failure setting secret configure file for ${Name} AWS_SECRET_ACCESS_KEY" && exiterror ; }
+    echo "$LoadedInitialConfigJenkins" | sed "s/~Id~/$Id_AWS_SECRET_ACCESS_KEY/g" | sed "s/~Description~/$Description_GITHUB_CRED/g" | sed "s,~Secret~,$AWS_SECRET_ACCESS_KEY,g" > $ConfigSecretJenkinsFileName && logokay "Successfully set secret configure file for ${Name} AWS_SECRET_ACCESS_KEY" || { logerror "Failure setting secret configure file for ${Name} AWS_SECRET_ACCESS_KEY" && exiterror ; }
 
     #Remote send the secret config AWS_SECRET_ACCESS_KEY
     java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD create-credentials-by-xml system::system::jenkins _ < $ConfigSecretJenkinsFileName > JenkinsExecution 2>&1 && logokay "Successfully executed send secret config for ${Name} AWS_SECRET_ACCESS_KEY" || { test $? -eq 1 && logwarning "Secret config for ${Name} AWS_SECRET_ACCESS_KEY already exists nothing changed" || { logerror "Failure executing send secret config for ${Name} AWS_SECRET_ACCESS_KEY" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; } ; }
 
     #Remove secret configure file
     rm $ConfigSecretJenkinsFileName && logokay "Successfully removed secret configure file for ${Name}" || { logerror "Failure removing secret configure file for ${Name}" && exiterror ; }
+
+    #Get the Jenkins cred configure file
+    curl -s -X GET $ConfigCredJenkins -O && logokay "Successfully obtained cred configure file for ${Name}" || { logerror "Failure obtaining cred configure file for ${Name}" && exiterror ; }
+
+    #Load the initial configuration for Jenkins
+    LoadedInitialConfigJenkins=$(cat $ConfigCredJenkinsFileName)
+
+    #Set the ID, Description, Username and Password for the cred configure file placeholders for GITHUB_CRED
+    echo "$LoadedInitialConfigJenkins" | sed "s/~Id~/$Id_GITHUB_CRED/g" | sed "s/~Description~/$Description_GITHUB_CRED/g" | sed "s,~Username~,$USER_GITHUB_USERNAME,g" | sed "s,~Password~,$USER_GITHUB_TOKEN,g" > $ConfigCredJenkinsFileName && logokay "Successfully set cred configure file for ${Name} GITHUB_CRED" || { logerror "Failure setting cred configure file for ${Name} GITHUB_CRED" && exiterror ; }
+
+    #Remote send the cred config GITHUB_CRED
+    java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD create-credentials-by-xml system::system::jenkins _ < $ConfigCredJenkinsFileName > JenkinsExecution 2>&1 && logokay "Successfully executed send cred config for ${Name} GITHUB_CRED" || { test $? -eq 1 && logwarning "Cred config for ${Name} GITHUB_CRED already exists nothing changed" || { logerror "Failure executing send cred config for ${Name} GITHUB_CRED" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; } ; }
+
+    #Remove cred configure file
+    rm $ConfigCredJenkinsFileName && logokay "Successfully removed cred configure file for ${Name}" || { logerror "Failure removing cred configure file for ${Name}" && exiterror ; }
 }
 
 #Log start
