@@ -30,12 +30,6 @@ main(){
     #Install java if not already
     aptinstalllog "default-jre"
 
-    #Install python3-pip if not already
-    aptinstalllog "python3-pip"
-
-    #Install python3-venv if not already
-    aptinstalllog "python3-venv"
-
     #Install nginx if not already
     aptinstalllog "nginx"
 
