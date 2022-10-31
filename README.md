@@ -1,13 +1,10 @@
 # Deployment-4
-Set up a CI/CD pipeline from start to finish using a Jenkins server and deploying with Terraform.
 
-# Todo
+Set up a CI/CD pipeline from start to finish using a Jenkins server and deploying with Terraform. 
 
-- Maybe Route 53 with Terraform to use a Subdomain and Domain
+My goal was to automate as much as I can, from setting up an ec2 with a Jenkins server all the way to having it do a build on the jenkins server. 
 
-- Maybe Ansible to configure Jenkins
-
-- Automate Jenkins Adding and configuring build
+To achieve this goal I used Github, Github Actions, Terraform and some Bash scripting. 
 
 # Secrets/Variables
 

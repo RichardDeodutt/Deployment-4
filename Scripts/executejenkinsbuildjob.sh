@@ -48,7 +48,7 @@ main(){
     systemctl start jenkins > /dev/null 2>&1 && logokay "Successfully started ${Name}" || { logerror "Failure starting ${Name}" && exiterror ; }
 
     #Remote send the build job command
-    java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD build $JENKINS_JOB_NAME/main -s -v && logokay "Successfully executed build job for ${Name}" || { logerror "Failure executing build job for ${Name}" && exiterror ; }
+    java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD build $JENKINS_JOB_NAME/main && logokay "Successfully executed build job for ${Name}" || { logerror "Failure executing build job for ${Name}" && exiterror ; }
 }
 
 #Log start
