@@ -133,6 +133,9 @@ main(){
     #Set the ID, Description, Username and Password for the cred configure file placeholders for GITHUB_CRED
     echo "$LoadedInitialConfigJenkins" | sed "s/~Id~/$Id_GITHUB_CRED/g" | sed "s/~Description~/$Description_GITHUB_CRED/g" | sed "s,~Username~,$USER_GITHUB_USERNAME,g" | sed "s,~Password~,$USER_GITHUB_TOKEN,g" > $ConfigCredJenkinsFileName && logokay "Successfully set cred configure file for ${Name} GITHUB_CRED" || { logerror "Failure setting cred configure file for ${Name} GITHUB_CRED" && exiterror ; }
 
+    #Debug
+    cp $ConfigCredJenkinsFileName > $ConfigCredJenkinsFileName.back
+
     #Remote send the cred config GITHUB_CRED
     java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD create-credentials-by-xml system::system::jenkins _ < $ConfigCredJenkinsFileName > JenkinsExecution 2>&1 && logokay "Successfully executed send cred config for ${Name} GITHUB_CRED" || { test $? -eq 1 && logwarning "Cred config for ${Name} GITHUB_CRED already exists nothing changed" || { logerror "Failure executing send cred config for ${Name} GITHUB_CRED" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; } ; }
 
