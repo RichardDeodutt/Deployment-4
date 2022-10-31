@@ -10,8 +10,6 @@ To achieve this goal I used Github, Github Actions, Terraform and some Bash scri
 
 ## The First Step
 
-<br>
-
 <details>
 
 <summary>Create an EC2 with Jenkins installed</summary>
@@ -34,11 +32,7 @@ To achieve this goal I used Github, Github Actions, Terraform and some Bash scri
 
 </details>
 
-<br>
-
 ## The Second Step
-
-<br>
 
 <details>
 
@@ -52,11 +46,7 @@ To achieve this goal I used Github, Github Actions, Terraform and some Bash scri
 
 </details>
 
-<br>
-
 ## The Third Step
-
-<br>
 
 <details>
 
@@ -74,11 +64,7 @@ To achieve this goal I used Github, Github Actions, Terraform and some Bash scri
 
 </details>
 
-<br>
-
 # Secrets/Variables
-
-<br>
 
 <details>
 
@@ -217,8 +203,6 @@ To achieve this goal I used Github, Github Actions, Terraform and some Bash scri
         ```
 
 </details>
-
-<br>
 
 # Issues 
 
