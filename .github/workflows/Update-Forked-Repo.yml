@@ -24,7 +24,7 @@ jobs:
     - name: Setup Env
       run: mkdir files && echo $USER_GITHUB_SSH_KEY_BASE64 | base64 -i --decode > files/id_rsa && chmod 600 files/id_rsa && export THIS_GITHUB_REPO_OWNER=$(echo $THIS_GITHUB_REPO_URL | cut -d "/" -f4) && export THIS_GITHUB_REPO_NAME=$(echo $THIS_GITHUB_REPO_URL | cut -d "/" -f5 | sed 's/.git//') && export THIS_GITHUB_REPO_HTTPS=$(echo "https://github.com/$THIS_GITHUB_REPO_OWNER/$THIS_GITHUB_REPO_NAME.git") && export THIS_GITHUB_REPO_SSH=$(echo "git@github.com:$THIS_GITHUB_REPO_OWNER/$THIS_GITHUB_REPO_NAME.git") && export FORKED_GITHUB_REPO_OWNER=$(echo $JENKINS_GITHUB_REPO_URL | cut -d "/" -f4) && export FORKED_GITHUB_REPO_NAME=$(echo $JENKINS_GITHUB_REPO_URL | cut -d "/" -f5 | sed 's/.git//') && export FORKED_GITHUB_REPO_HTTPS=$(echo "https://github.com/$FORKED_GITHUB_REPO_OWNER/$FORKED_GITHUB_REPO_NAME.git") && export FORKED_GITHUB_REPO_SSH=$(echo "git@github.com:$FORKED_GITHUB_REPO_OWNER/$FORKED_GITHUB_REPO_NAME.git")
     - name: Git Clone This Repo
-      run: git clone $THIS_GITHUB_REPO_HTTPS
+      run: echo $THIS_GITHUB_REPO_HTTPS && git clone $THIS_GITHUB_REPO_HTTPS
     - name: Git Clone Forked Repo
       run: git clone $FORKED_GITHUB_REPO_HTTPS
     - name: Copy
