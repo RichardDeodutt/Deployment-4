@@ -76,6 +76,12 @@ To achieve this goal I used Github, Github Actions, Terraform and some Bash scri
 
     - AWS IAM User with AdministratorAccess, their Access Key ID. 
 
+        Secrets/Variables:
+
+        ```
+        AWS_ACCESS_KEY_ID
+        ```
+
         Example Below: 
 
         ```
@@ -85,6 +91,12 @@ To achieve this goal I used Github, Github Actions, Terraform and some Bash scri
 - AWS_SECRET_ACCESS_KEY 
 
     - AWS IAM User with AdministratorAccess, their Secret Access Key ID. 
+
+        Secrets/Variables:
+
+        ```
+        AWS_SECRET_ACCESS_KEY
+        ```
 
         Example Below: 
 
@@ -96,6 +108,12 @@ To achieve this goal I used Github, Github Actions, Terraform and some Bash scri
 
     - AWS SSH Key Pair to SSH into the Jenkins Server EC2 in base64 format using the base64 command. 
 
+        Secrets/Variables:
+
+        ```
+        AWS_SSH_KEY_BASE64
+        ```
+
         Example Below: 
 
         ```
@@ -105,6 +123,12 @@ To achieve this goal I used Github, Github Actions, Terraform and some Bash scri
 - JENKINS_USERNAME 
 
     - Desired Jenkins username to create the Jenkins Server with. 
+
+        Secrets/Variables:
+
+        ```
+        JENKINS_USERNAME
+        ```
 
         Example Below: 
 
@@ -116,6 +140,12 @@ To achieve this goal I used Github, Github Actions, Terraform and some Bash scri
 
     - Desired Jenkins password to create the Jenkins Server with. 
 
+        Secrets/Variables:
+
+        ```
+        JENKINS_PASSWORD
+        ```
+
         Example Below: 
 
         ```
@@ -125,6 +155,12 @@ To achieve this goal I used Github, Github Actions, Terraform and some Bash scri
 - JENKINS_EMAIL 
 
     - Desired Jenkins admin email to create the Jenkins Server with. 
+
+        Secrets/Variables:
+
+        ```
+        JENKINS_EMAIL
+        ```
 
         Example Below: 
 
@@ -136,6 +172,12 @@ To achieve this goal I used Github, Github Actions, Terraform and some Bash scri
 
     - Your Github Username to access your forked repo. 
 
+        Secrets/Variables:
+
+        ```
+        USER_GITHUB_USERNAME
+        ```
+
         Example Below: 
 
         ```
@@ -145,6 +187,12 @@ To achieve this goal I used Github, Github Actions, Terraform and some Bash scri
 - USER_GITHUB_TOKEN 
 
     - Your Github Personal Access token to access your forked repo. 
+
+        Secrets/Variables:
+
+        ```
+        USER_GITHUB_TOKEN
+        ```
 
         Example Below: 
 
@@ -156,6 +204,12 @@ To achieve this goal I used Github, Github Actions, Terraform and some Bash scri
 
     - The name of the Build Job or Project Jenkins uses. 
 
+        Secrets/Variables:
+
+        ```
+        JENKINS_JOB_NAME
+        ```
+
         Example Below: 
 
         ```
@@ -166,6 +220,12 @@ To achieve this goal I used Github, Github Actions, Terraform and some Bash scri
 
     - The url of the forked repo. 
 
+        Secrets/Variables:
+
+        ```
+        JENKINS_GITHUB_REPO_URL
+        ```
+
         Example Below: 
 
         ```
@@ -175,7 +235,13 @@ To achieve this goal I used Github, Github Actions, Terraform and some Bash scri
 - THIS_GITHUB_REPO_URL
 
     - The url of this repo or if this is a fork of the original then the url of this forked repo. 
-    
+
+        Secrets/Variables:
+
+        ```
+        THIS_GITHUB_REPO_URL
+        ```
+
         Example Below: 
 
         ```
@@ -186,6 +252,12 @@ To achieve this goal I used Github, Github Actions, Terraform and some Bash scri
 
     - Your GitHub SSH key to do a push in base64 format using the base64 command. 
 
+        Secrets/Variables:
+
+        ```
+        USER_GITHUB_SSH_KEY_BASE64
+        ```
+
         Example Below: 
 
         ```
@@ -195,6 +267,12 @@ To achieve this goal I used Github, Github Actions, Terraform and some Bash scri
 - USER_GITHUB_EMAIL
 
     - Your GitHub email to author a commit can be the same as the JENKINS_EMAIL. 
+
+        Secrets/Variables:
+
+        ```
+        USER_GITHUB_EMAIL
+        ```
 
         Example Below: 
 
