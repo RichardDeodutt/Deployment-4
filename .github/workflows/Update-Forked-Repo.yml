@@ -51,6 +51,6 @@ jobs:
     - name: Copy
       run: cp -a $(cat THIS_GITHUB_REPO_NAME)/Modified-Application-Files/* $(cat FORKED_GITHUB_REPO_NAME)/
     - name: GitHub Update
-      run: cd $(cat FORKED_GITHUB_REPO_NAME) && git add . && git --author="$(cat ../USER_GITHUB_USERNAME) <$(cat ../USER_GITHUB_EMAIL)>" commit -m "GA Update" && GIT_SSH_COMMAND='ssh -i ../files/id_rsa -o IdentitiesOnly=yes' git push
+      run: cd $(cat FORKED_GITHUB_REPO_NAME) && git add . && git --author="$(cat $USER_GITHUB_USERNAME) <$(cat $USER_GITHUB_EMAIL)>" commit -m "GA Update" && GIT_SSH_COMMAND='ssh -i ../files/id_rsa -o IdentitiesOnly=yes' git push
     - name: Delete SSH Key
       run: rm ../files/id_rsa
