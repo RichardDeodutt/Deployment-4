@@ -33,3 +33,9 @@ To achieve this goal I used Github, Github Actions, Terraform and some Bash scri
 - USER_GITHUB_SSH_KEY_BASE64
 
 - USER_GITHUB_EMAIL
+
+Issues: 
+
+- Sometimes apt fails because of broken packages or other reason making this system unstable.
+
+- Sometimes the Jenkins server plugin downloads can fail for unknown reasons and it times out, currently a unhandled situation.

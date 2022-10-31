@@ -25,7 +25,7 @@ main(){
     aptupdatelog
 
     #Upgrade the system
-    DEBIAN_FRONTEND=noninteractive apt-get upgrade -y > /dev/null 2>&1 && logokay "Successfully finished ${Name}" || { logerror "Failure finishing ${Name}" && exiterror ; }
+    DEBIAN_FRONTEND=noninteractive apt-get upgrade -y > JenkinsExecution 2>&1 && logokay "Successfully finished ${Name}" || { test $? -eq 100 && logwarning "Could not auto update due to 'Broken Packages'" || { logerror "Failure finishing ${Name}" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; } ; }
 
     #Remove unneeded packages
     apt-get autoremove -y > /dev/null 2>&1 && logokay "Successfully cleaned up the ${Name}" || { logerror "Failure cleaning up the ${Name}" && exiterror ; }
