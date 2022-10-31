@@ -151,9 +151,6 @@ main(){
     #Remote send the job config
     java -jar $JCJ -s "http://localhost:8080" -http -auth $JENKINS_USERNAME:$JENKINS_PASSWORD create-job $JENKINS_JOB_NAME < $ConfigJobJenkinsFileName > JenkinsExecution 2>&1 && logokay "Successfully executed send job config for ${Name}" || { test $? -eq 4 && logwarning "Job config for ${Name} already exists nothing changed" || { logerror "Failure executing send job config for ${Name}" && cat JenkinsExecution && rm JenkinsExecution && exiterror ; } ; }
 
-    #Debug
-    cp $ConfigJobJenkinsFileName $ConfigJobJenkinsFileName.backup
-
     #Remove job configure file
     rm $ConfigJobJenkinsFileName && logokay "Successfully removed job configure file for ${Name}" || { logerror "Failure removing job configure file for ${Name}" && exiterror ; }
 }

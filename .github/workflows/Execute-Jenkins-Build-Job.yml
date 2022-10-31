@@ -1,0 +1,44 @@
+name: Execute Jenkins Build Job
+
+on: 
+  workflow_dispatch: 
+    branches: 
+      - main
+
+env: 
+  AWS_SSH_KEY_BASE64: ${{ secrets.AWS_SSH_KEY_BASE64 }}
+  JENKINS_USERNAME: ${{ secrets.JENKINS_USERNAME }}
+  JENKINS_PASSWORD: ${{ secrets.JENKINS_PASSWORD }}
+  JENKINS_JOB_NAME: ${{ secrets.JENKINS_JOB_NAME }}
+
+jobs: 
+  execute-jenkins-build-job: 
+    name: Execute Jenkins Build Job
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./Terraform/Jenkins
+    steps: 
+    - uses: actions/checkout@v3
+      name: GitHub Checkout
+    - name: Decode and Save SSH Key
+      run: mkdir files && echo $AWS_SSH_KEY_BASE64 | base64 -i --decode > files/id_rsa && chmod 600 files/id_rsa
+    - name: Terraform Init
+      run: terraform init
+    - name: Terraform Validate
+      run: terraform validate
+    - name: Terraform Output
+      run: terraform output -raw ec2publicip > files/ip
+    - name: SSH Add Credentials
+      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; echo $JENKINS_USERNAME | sudo tee JENKINS_USERNAME > /dev/null 2>&1 && echo $JENKINS_PASSWORD | sudo tee JENKINS_PASSWORD > /dev/null 2>&1 && echo $JENKINS_JOB_NAME | sudo tee JENKINS_JOB_NAME > /dev/null 2>&1"
+    - name: SSH Execute Jenkins Build Job
+      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runexecutejenkinsbuildjob.sh && sudo chmod +x runexecutejenkinsbuildjob.sh && sudo ./runexecutejenkinsbuildjob.sh"
+    - name: SSH Remove Credentials
+      run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; sudo rm JENKINS_USERNAME && sudo rm JENKINS_PASSWORD && sudo rm JENKINS_JOB_NAME"
+    - name: Delete SSH Key and IP
+      if: always()
+      run: rm files/id_rsa && rm files/ip
+    - name: Jenkins Link
+      if: always()
+      run: printf "\033[0;32mJenkins Link ~>\033[0m http://$(terraform output -raw ec2publicip)/\n"
