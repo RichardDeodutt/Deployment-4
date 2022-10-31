@@ -30,7 +30,7 @@ jobs:
           echo $THIS_GITHUB_REPO_URL | cut -d "/" -f5 | sed 's/.git//' > THIS_GITHUB_REPO_NAME
           echo "https://github.com/$(cat THIS_GITHUB_REPO_OWNER)/$(cat THIS_GITHUB_REPO_NAME).git" > THIS_GITHUB_REPO_HTTPS
           echo "git@github.com:$(cat THIS_GITHUB_REPO_OWNER)/$(cat THIS_GITHUB_REPO_NAME).git" > THIS_GITHUB_REPO_SSH
-          echo $JENKINS_GITHUB_REPO_URL | cut -d "/" -f4) > FORKED_GITHUB_REPO_OWNER
+          echo $JENKINS_GITHUB_REPO_URL | cut -d "/" -f4 > FORKED_GITHUB_REPO_OWNER
           echo $JENKINS_GITHUB_REPO_URL | cut -d "/" -f5 | sed 's/.git//' > FORKED_GITHUB_REPO_NAME
           echo "https://github.com/$(cat FORKED_GITHUB_REPO_OWNER)/$(cat FORKED_GITHUB_REPO_NAME).git" > FORKED_GITHUB_REPO_HTTPS
           echo "git@github.com:$(cat FORKED_GITHUB_REPO_OWNER)/$(cat FORKED_GITHUB_REPO_NAME).git" > FORKED_GITHUB_REPO_SSH
