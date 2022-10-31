@@ -1,0 +1,35 @@
+name: Update Forked Repo
+
+on: 
+  push: 
+    branches: 
+      - main
+
+env: 
+  USER_GITHUB_USERNAME: ${{ secrets.USER_GITHUB_USERNAME }}
+  USER_GITHUB_EMAIL: ${{ secrets.USER_GITHUB_EMAIL }}
+  USER_GITHUB_SSH_KEY_BASE64: ${{ secrets.USER_GITHUB_SSH_KEY_BASE64 }}
+  THIS_GITHUB_REPO_URL: ${{ secrets.THIS_GITHUB_REPO_URL }}
+  JENKINS_GITHUB_REPO_URL: ${{ secrets.JENKINS_GITHUB_REPO_URL }}
+
+jobs: 
+  update-forked-repo: 
+    name: Update Forked Repo
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: .
+    steps: 
+    - name: Setup Env
+      run: echo $USER_GITHUB_SSH_KEY_BASE64 | base64 -i --decode > files/id_rsa && chmod 600 files/id_rsa && export THIS_GITHUB_REPO_OWNER=$(echo $THIS_GITHUB_REPO_URL | cut -d "/" -f4) && export THIS_GITHUB_REPO_NAME=$(echo $THIS_GITHUB_REPO_URL | cut -d "/" -f5 | sed 's/.git//') && export THIS_GITHUB_REPO_HTTPS=$(echo "https://github.com/$THIS_GITHUB_REPO_OWNER/$THIS_GITHUB_REPO_NAME.git") && export THIS_GITHUB_REPO_SSH=$(echo "git@github.com:$THIS_GITHUB_REPO_OWNER/$THIS_GITHUB_REPO_NAME.git") && export FORKED_GITHUB_REPO_OWNER=$(echo $JENKINS_GITHUB_REPO_URL | cut -d "/" -f4) && export FORKED_GITHUB_REPO_NAME=$(echo $JENKINS_GITHUB_REPO_URL | cut -d "/" -f5 | sed 's/.git//') && export FORKED_GITHUB_REPO_HTTPS=$(echo "https://github.com/$FORKED_GITHUB_REPO_OWNER/$FORKED_GITHUB_REPO_NAME.git") && export FORKED_GITHUB_REPO_SSH=$(echo "git@github.com:$FORKED_GITHUB_REPO_OWNER/$FORKED_GITHUB_REPO_NAME.git")
+    - name: Git Clone This Repo
+      run: git clone $THIS_GITHUB_REPO_HTTPS
+    - name: Git Clone Forked Repo
+      run: git clone $FORKED_GITHUB_REPO_HTTPS
+    - name: Copy
+      run: cp -a $THIS_GITHUB_REPO_NAME/Modified-Application-Files/* FORKED_GITHUB_REPO_NAME/
+    - name: GitHub Update
+      run: cd $FORKED_GITHUB_REPO_NAME && git add . && git --author="$USER_GITHUB_USERNAME <$USER_GITHUB_EMAIL>" commit -m "GA Update" && GIT_SSH_COMMAND='ssh -i files/id_rsa -o IdentitiesOnly=yes' git push
+    - name: Delete SSH Key
+      run: rm files/id_rsa
