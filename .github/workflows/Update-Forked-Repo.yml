@@ -26,24 +26,24 @@ jobs:
           mkdir files
           echo $USER_GITHUB_SSH_KEY_BASE64 | base64 -i --decode > files/id_rsa
           chmod 600 files/id_rsa
-          echo "THIS_GITHUB_REPO_OWNER=$(echo $THIS_GITHUB_REPO_URL | cut -d "/" -f4)" >> $GITHUB_ENV
-          echo "THIS_GITHUB_REPO_NAME=$(echo $THIS_GITHUB_REPO_URL | cut -d "/" -f5 | sed 's/.git//')" >> $GITHUB_ENV
-          echo "THIS_GITHUB_REPO_HTTPS=$(echo "https://github.com/$(echo $THIS_GITHUB_REPO_OWNER)/$(echo $THIS_GITHUB_REPO_NAME).git")" >> $GITHUB_ENV
-          echo "THIS_GITHUB_REPO_SSH=$(echo "git@github.com:$(echo $THIS_GITHUB_REPO_OWNER)/$(echo $THIS_GITHUB_REPO_NAME).git")" >> $GITHUB_ENV
-          echo "FORKED_GITHUB_REPO_OWNER=$(echo $JENKINS_GITHUB_REPO_URL | cut -d "/" -f4)" >> $GITHUB_ENV
-          echo "FORKED_GITHUB_REPO_NAME=$(echo $JENKINS_GITHUB_REPO_URL | cut -d "/" -f5 | sed 's/.git//')" >> $GITHUB_ENV
-          echo "FORKED_GITHUB_REPO_HTTPS=$(echo "https://github.com/$(echo $FORKED_GITHUB_REPO_OWNER)/$(echo $FORKED_GITHUB_REPO_NAME).git")" >> $GITHUB_ENV
-          echo "FORKED_GITHUB_REPO_SSH=$(echo "git@github.com:$(echo $FORKED_GITHUB_REPO_OWNER)/$(echo $FORKED_GITHUB_REPO_NAME).git")" >> $GITHUB_ENV
+          echo "THIS_GITHUB_REPO_OWNER=$(echo $THIS_GITHUB_REPO_URL | cut -d "/" -f4)" > GITHUB_ENV
+          echo "THIS_GITHUB_REPO_NAME=$(echo $THIS_GITHUB_REPO_URL | cut -d "/" -f5 | sed 's/.git//')" > GITHUB_ENV
+          echo "THIS_GITHUB_REPO_HTTPS=$(echo "https://github.com/$(echo $THIS_GITHUB_REPO_OWNER)/$(echo $THIS_GITHUB_REPO_NAME).git")" > GITHUB_ENV
+          echo "THIS_GITHUB_REPO_SSH=$(echo "git@github.com:$(echo $THIS_GITHUB_REPO_OWNER)/$(echo $THIS_GITHUB_REPO_NAME).git")" > GITHUB_ENV
+          echo "FORKED_GITHUB_REPO_OWNER=$(echo $JENKINS_GITHUB_REPO_URL | cut -d "/" -f4)" > GITHUB_ENV
+          echo "FORKED_GITHUB_REPO_NAME=$(echo $JENKINS_GITHUB_REPO_URL | cut -d "/" -f5 | sed 's/.git//')" > GITHUB_ENV
+          echo "FORKED_GITHUB_REPO_HTTPS=$(echo "https://github.com/$(echo $FORKED_GITHUB_REPO_OWNER)/$(echo $FORKED_GITHUB_REPO_NAME).git")" > GITHUB_ENV
+          echo "FORKED_GITHUB_REPO_SSH=$(echo "git@github.com:$(echo $FORKED_GITHUB_REPO_OWNER)/$(echo $FORKED_GITHUB_REPO_NAME).git")" > GITHUB_ENV
     - name : Check Env
       run: |
-          echo "THIS_GITHUB_REPO_OWNER: $THIS_GITHUB_REPO_OWNER"
-          echo "THIS_GITHUB_REPO_NAME: $THIS_GITHUB_REPO_NAME"
-          echo "THIS_GITHUB_REPO_HTTPS: $THIS_GITHUB_REPO_HTTPS"
-          echo "THIS_GITHUB_REPO_SSH: $THIS_GITHUB_REPO_SSH"
-          echo "FORKED_GITHUB_REPO_OWNER: $FORKED_GITHUB_REPO_OWNER"
-          echo "FORKED_GITHUB_REPO_NAME: $FORKED_GITHUB_REPO_NAME"
-          echo "FORKED_GITHUB_REPO_HTTPS: $FORKED_GITHUB_REPO_HTTPS"
-          echo "FORKED_GITHUB_REPO_SSH: $FORKED_GITHUB_REPO_SSH"
+          echo "THIS_GITHUB_REPO_OWNER: $(cat THIS_GITHUB_REPO_OWNER)"
+          echo "THIS_GITHUB_REPO_NAME: $(cat THIS_GITHUB_REPO_NAME)"
+          echo "THIS_GITHUB_REPO_HTTPS: $(cat THIS_GITHUB_REPO_HTTPS)"
+          echo "THIS_GITHUB_REPO_SSH: $(cat THIS_GITHUB_REPO_SSH)"
+          echo "FORKED_GITHUB_REPO_OWNER: $(cat FORKED_GITHUB_REPO_OWNER)"
+          echo "FORKED_GITHUB_REPO_NAME: $(cat FORKED_GITHUB_REPO_NAME)"
+          echo "FORKED_GITHUB_REPO_HTTPS: $(cat FORKED_GITHUB_REPO_HTTPS)"
+          echo "FORKED_GITHUB_REPO_SSH: $(cat FORKED_GITHUB_REPO_SSH)"
     - name: Git Clone This Repo
       run: git clone $THIS_GITHUB_REPO_HTTPS
     - name: Git Clone Forked Repo
