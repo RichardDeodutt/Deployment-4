@@ -28,12 +28,12 @@ jobs:
           chmod 600 files/id_rsa
           echo "THIS_GITHUB_REPO_OWNER=$(echo $THIS_GITHUB_REPO_URL | cut -d "/" -f4)" > GITHUB_ENV
           echo "THIS_GITHUB_REPO_NAME=$(echo $THIS_GITHUB_REPO_URL | cut -d "/" -f5 | sed 's/.git//')" > GITHUB_ENV
-          echo "THIS_GITHUB_REPO_HTTPS=$(echo "https://github.com/$(echo $THIS_GITHUB_REPO_OWNER)/$(echo $THIS_GITHUB_REPO_NAME).git")" > GITHUB_ENV
-          echo "THIS_GITHUB_REPO_SSH=$(echo "git@github.com:$(echo $THIS_GITHUB_REPO_OWNER)/$(echo $THIS_GITHUB_REPO_NAME).git")" > GITHUB_ENV
+          echo "THIS_GITHUB_REPO_HTTPS=$(echo "https://github.com/$(cat THIS_GITHUB_REPO_OWNER)/$(cat THIS_GITHUB_REPO_NAME).git")" > GITHUB_ENV
+          echo "THIS_GITHUB_REPO_SSH=$(echo "git@github.com:$(cat THIS_GITHUB_REPO_OWNER)/$(cat THIS_GITHUB_REPO_NAME).git")" > GITHUB_ENV
           echo "FORKED_GITHUB_REPO_OWNER=$(echo $JENKINS_GITHUB_REPO_URL | cut -d "/" -f4)" > GITHUB_ENV
           echo "FORKED_GITHUB_REPO_NAME=$(echo $JENKINS_GITHUB_REPO_URL | cut -d "/" -f5 | sed 's/.git//')" > GITHUB_ENV
-          echo "FORKED_GITHUB_REPO_HTTPS=$(echo "https://github.com/$(echo $FORKED_GITHUB_REPO_OWNER)/$(echo $FORKED_GITHUB_REPO_NAME).git")" > GITHUB_ENV
-          echo "FORKED_GITHUB_REPO_SSH=$(echo "git@github.com:$(echo $FORKED_GITHUB_REPO_OWNER)/$(echo $FORKED_GITHUB_REPO_NAME).git")" > GITHUB_ENV
+          echo "FORKED_GITHUB_REPO_HTTPS=$(echo "https://github.com/$(cat FORKED_GITHUB_REPO_OWNER)/$(cat FORKED_GITHUB_REPO_NAME).git")" > GITHUB_ENV
+          echo "FORKED_GITHUB_REPO_SSH=$(echo "git@github.com:$(cat FORKED_GITHUB_REPO_OWNER)/$(cat FORKED_GITHUB_REPO_NAME).git")" > GITHUB_ENV
     - name : Check Env
       run: |
           echo "THIS_GITHUB_REPO_OWNER: $(cat THIS_GITHUB_REPO_OWNER)"
