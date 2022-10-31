@@ -53,4 +53,5 @@ jobs:
     - name: GitHub Update
       run: cd $(cat FORKED_GITHUB_REPO_NAME) && git add . && git config user.name "$(echo $USER_GITHUB_USERNAME)" && git config user.email "$(echo $USER_GITHUB_EMAIL)" && git commit -m "GA Update" && git -c core.sshCommand="ssh -i ../files/id_rsa" push
     - name: Delete SSH Key
+      if: always()
       run: rm files/id_rsa

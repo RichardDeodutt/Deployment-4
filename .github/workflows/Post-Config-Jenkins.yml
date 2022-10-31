@@ -42,6 +42,8 @@ jobs:
     - name: SSH Remove Credentials
       run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; sudo rm JENKINS_USERNAME && sudo rm JENKINS_PASSWORD && sudo rm AWS_ACCESS_KEY_ID && sudo rm AWS_SECRET_ACCESS_KEY && sudo rm USER_GITHUB_USERNAME && sudo rm USER_GITHUB_TOKEN && sudo rm JENKINS_JOB_NAME && sudo rm JENKINS_GITHUB_REPO_URL"
     - name: Delete SSH Key and IP
+      if: always()
       run: rm files/id_rsa && rm files/ip
     - name: Jenkins Link
+      if: always()
       run: printf "\033[0;32mJenkins Link ~>\033[0m http://$(terraform output -raw ec2publicip)/\n"

@@ -51,8 +51,11 @@ jobs:
     - name: SSH Status Check
       run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-4/main/Runners/runstatuscheck.sh && sudo chmod +x runstatuscheck.sh && sudo ./runstatuscheck.sh"
     - name: SSH Remove Credentials and IP
+      if: always()
       run: ssh -q -o StrictHostKeyChecking=accept-new -i files/id_rsa ubuntu@$(cat files/ip) -tt "cd RDGOAT > /dev/null 2>&1 || { mkdir RDGOAT && cd RDGOAT ; } ; sudo rm JENKINS_USERNAME && sudo rm JENKINS_PASSWORD && sudo rm JENKINS_EMAIL && sudo rm JENKINS_IP"
     - name: Delete SSH Key and IP
+      if: always()
       run: rm files/id_rsa && rm files/ip
     - name: Jenkins Link
+      if: always()
       run: printf "\033[0;32mJenkins Link ~>\033[0m http://$(terraform output -raw ec2publicip)/\n"
