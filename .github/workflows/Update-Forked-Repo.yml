@@ -45,9 +45,9 @@ jobs:
           echo "FORKED_GITHUB_REPO_HTTPS: $(cat FORKED_GITHUB_REPO_HTTPS)"
           echo "FORKED_GITHUB_REPO_SSH: $(cat FORKED_GITHUB_REPO_SSH)"
     - name: Git Clone This Repo
-      run: git clone $(cat THIS_GITHUB_REPO_HTTPS)
+      run: git clone $(cat THIS_GITHUB_REPO_SSH)
     - name: Git Clone Forked Repo
-      run: git clone $(cat FORKED_GITHUB_REPO_HTTPS)
+      run: git clone $(cat FORKED_GITHUB_REPO_SSH)
     - name: Copy
       run: cp -a $(cat THIS_GITHUB_REPO_NAME)/Modified-Application-Files/* $(cat FORKED_GITHUB_REPO_NAME)/
     - name: GitHub Update
