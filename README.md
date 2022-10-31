@@ -302,7 +302,7 @@ To achieve this goal I used Github, Github Actions, Terraform and some Bash scri
 
 - Sometimes the Jenkins server plugin downloads can fail for unknown reasons and it times out, currently a unhandled situation. There seems to be issues with dependencies so you have to manually go to the Jenkins Server and fix them. 
 
-- Jenkins Server seems to become unresponsive sometimes it might be because of not enough resources so I used a t3 which is not free tier to avoid this. 
+- Jenkins Server seems to become unresponsive during cypress test it might be because of not enough resources so I used a c5.xlarge which is not free tier to avoid this. 
 
 # Improvements 
 
