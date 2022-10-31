@@ -45,7 +45,7 @@ jobs:
           echo "FORKED_GITHUB_REPO_HTTPS: $(cat FORKED_GITHUB_REPO_HTTPS)"
           echo "FORKED_GITHUB_REPO_SSH: $(cat FORKED_GITHUB_REPO_SSH)"
     - name: Git Clone This Repo
-      run: GIT_SSH_COMMAND='ssh -i files/id_rsa -o IdentitiesOnly=yes' git clone $(cat THIS_GITHUB_REPO_SSH)
+      run: git -c core.sshCommand="ssh -i files/id_rsa" clone $(cat THIS_GITHUB_REPO_SSH)
     - name: Git Clone Forked Repo
       run: GIT_SSH_COMMAND='ssh -i files/id_rsa -o IdentitiesOnly=yes' git clone $(cat FORKED_GITHUB_REPO_SSH)
     - name: Copy
