@@ -282,6 +282,20 @@ To achieve this goal I used Github, Github Actions, Terraform and some Bash scri
 
 </details>
 
+# Diagram
+
+<details>
+
+<summary>Show Diagram</summary>
+
+<br>
+
+<p align="center">
+<a href="https://github.com/RichardDeodutt/Deployment-4/blob/main/Images/Diagram.drawio.png"><img src="https://github.com/RichardDeodutt/Deployment-4/blob/main/Images/Diagram.drawio.png" />
+</p>
+
+</details>
+
 # Issues 
 
 - Sometimes apt fails because of broken packages or other reason making this system unstable.
