@@ -290,6 +290,8 @@ To achieve this goal I used Github, Github Actions, Terraform and some Bash scri
 
 - Jenkins Server seems to become unresponsive sometimes it might be because of not enough resources so I used a t3 which is not free tier to avoid this. 
 
+- Jenkins did not seem to update the commits with the build status. Something is wrong with setting the credentials for GitHub
+
 # Improvements 
 
 - With some more times I can work on the Issues
@@ -299,3 +301,7 @@ To achieve this goal I used Github, Github Actions, Terraform and some Bash scri
 - Maybe I could use Ansible to do the configuration of Jenkins. 
 
 - Improve the Terraform files to create the secuirty group and keypair and other resources it needs for the Jenkins Server. 
+
+- Making this system less unstable. 
+
+- Tidy up the code to be more readable
