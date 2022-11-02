@@ -304,6 +304,8 @@ To achieve this goal I used Github, Github Actions, Terraform and some Bash scri
 
 - Jenkins Server seems to become unresponsive during cypress test it might be because of not enough resources so I used a c5.xlarge which is not free tier to avoid this. Can't avoid a issue with the cypress test. 
 
+- Stopping a job when it's building the tools might cause issues with npm so using a time based method is unreliable as it guesses when it starts. Need a better method to check when it auto starts the first job and cancels it or a way to have it not auto start a first job. 
+
 # Improvements 
 
 - With some more times I can work on the Issues
