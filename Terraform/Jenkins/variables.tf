@@ -10,7 +10,7 @@ variable "ami"{
 
 variable "itype"{
     type = string
-    default = "t2.micro"
+    default = "c5.xlarge"
 }
 
 variable "publicip"{

@@ -4,7 +4,6 @@ pipeline{
     stage('Build Tools') {
       steps {
         sh '''#!/bin/bash
-        source testenv/bin/activate
         node --max-old-space-size=100 /usr/bin/npm install --save-dev cypress@7.6.0
         /usr/bin/npx cypress verify
         '''
