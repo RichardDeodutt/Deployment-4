@@ -27,7 +27,7 @@ JENKINS_PASSWORD=$(cat JENKINS_PASSWORD)
 #List of pending jobs
 PendingJobs="Some Jobs"
 
-#Start Time of waitinf or plugins to install
+#Start Time of waiting or plugins to install
 StartEpoch="Unset"
 
 #Retry or sleep delay in seconds
