@@ -88,7 +88,7 @@ pipeline{
           
           StartEpoch=$(date +%s)
 
-          Timeout=600
+          Timeout=300
 
           Retry=15
 
